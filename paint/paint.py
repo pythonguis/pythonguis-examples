@@ -34,6 +34,8 @@ MODES = [
     'ellipse', 'roundrect'
 ]
 
+CANVAS_DIMENSIONS = 600, 400
+
 STAMP_DIR = './stamps'
 STAMPS = [os.path.join(STAMP_DIR, f) for f in os.listdir(STAMP_DIR)]
 
@@ -52,6 +54,7 @@ class Canvas(QLabel):
     secondary_color_updated = pyqtSignal(str)
 
     active_color = None
+    preview_pen = None
 
     timer_event = None
 
@@ -59,7 +62,7 @@ class Canvas(QLabel):
 
     def reset(self):
         # Create the pixmap for display.
-        self.setPixmap(QPixmap(600,400))
+        self.setPixmap(QPixmap(*CANVAS_DIMENSIONS))
         self.eraser_color = self.secondary_color or QColor(Qt.white)
         self.eraser_color.setAlpha(100)
         self.pixmap().fill(self.background_color)
@@ -136,10 +139,86 @@ class Canvas(QLabel):
 
     # Mode-specific events.
 
+    # Select polygon events
+
+    def selectpoly_mousePressEvent(self, e):
+        if not self.locked or e.button == Qt.RightButton:
+            self.active_shape_fn = 'drawPolygon'
+            self.preview_pen = SELECTION_PEN
+            self.generic_poly_mousePressEvent(e)
+
+    def selectpoly_timerEvent(self, final=False):
+        self.generic_poly_timerEvent(final)
+
+    def selectpoly_mouseMoveEvent(self, e):
+        if not self.locked:
+            self.generic_poly_mouseMoveEvent(e)
+
+    def selectpoly_mouseDoubleClickEvent(self, e):
+        self.current_pos = e.pos()
+        self.locked = True
+
+    def selectpoly_copy(self):
+        """
+        Copy a polygon region from the current image, returning it.
+
+        Create a mask for the selected area, and use it to blank
+        out non-selected regions. Then get the bounding rect of the
+        selection and crop to produce the smallest possible image.
+
+        :return: QPixmap of the copied region.
+        """
+        self.timer_cleanup()
+
+        pixmap = self.pixmap().copy()
+        bitmap = QBitmap(*CANVAS_DIMENSIONS)
+        bitmap.clear()  # Starts with random data visible.
+
+        p = QPainter(bitmap)
+        # Construct a mask where the user selected area will be kept, the rest removed from the image is transparent.
+        userpoly = QPolygon(self.history_pos + [self.current_pos])
+        p.setPen(QPen(Qt.color1))
+        p.setBrush(QBrush(Qt.color1))  # Solid color, Qt.color1 == bit on.
+        p.drawPolygon(userpoly)
+        p.end()
+
+        # Set our created mask on the image.
+        pixmap.setMask(bitmap)
+
+        # Calculate the bounding rect and return a copy of that region.
+        return pixmap.copy(userpoly.boundingRect())
+
+    # Select rectangle events
+
+    def selectrect_mousePressEvent(self, e):
+        self.active_shape_fn = 'drawRect'
+        self.preview_pen = SELECTION_PEN
+        self.generic_shape_mousePressEvent(e)
+
+    def selectrect_timerEvent(self, final=False):
+        self.generic_shape_timerEvent(final)
+
+    def selectrect_mouseMoveEvent(self, e):
+        if not self.locked:
+            self.current_pos = e.pos()
+
+    def selectrect_mouseReleaseEvent(self, e):
+        self.current_pos = e.pos()
+        self.locked = True
+
+    def selectrect_copy(self):
+        """
+        Copy a rectangle region of the current image, returning it.
+
+        :return: QPixmap of the copied region.
+        """
+        self.timer_cleanup()
+        return self.pixmap().copy(QRect(self.origin_pos, self.current_pos))
+
     # Eraser events
 
     def eraser_mousePressEvent(self, e):
-        return self.generic_mousePressEvent(e)
+        self.generic_mousePressEvent(e)
 
     def eraser_mouseMoveEvent(self, e):
         if self.last_pos:
@@ -151,7 +230,7 @@ class Canvas(QLabel):
             self.update()
 
     def eraser_mouseReleaseEvent(self, e):
-        return self.generic_mouseReleaseEvent(e)
+        self.generic_mouseReleaseEvent(e)
 
     # Stamp (pie) events
 
@@ -164,43 +243,41 @@ class Canvas(QLabel):
     # Pen events
 
     def pen_mousePressEvent(self, e):
-        return self.generic_mousePressEvent(e)
+        self.generic_mousePressEvent(e)
 
     def pen_mouseMoveEvent(self, e):
         if self.last_pos:
             p = QPainter(self.pixmap())
             p.setPen(QPen(self.active_color, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-
             p.drawLine(self.last_pos, e.pos())
 
             self.last_pos = e.pos()
             self.update()
 
     def pen_mouseReleaseEvent(self, e):
-        return self.generic_mouseReleaseEvent(e)
+        self.generic_mouseReleaseEvent(e)
 
     # Brush events
 
     def brush_mousePressEvent(self, e):
-        return self.generic_mousePressEvent(e)
+        self.generic_mousePressEvent(e)
 
     def brush_mouseMoveEvent(self, e):
         if self.last_pos:
             p = QPainter(self.pixmap())
             p.setPen(QPen(self.active_color, 10, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-
             p.drawLine(self.last_pos, e.pos())
 
             self.last_pos = e.pos()
             self.update()
 
     def brush_mouseReleaseEvent(self, e):
-        return self.generic_mouseReleaseEvent(e)
+        self.generic_mouseReleaseEvent(e)
 
     # Spray events
 
     def spray_mousePressEvent(self, e):
-        return self.generic_mousePressEvent(e)
+        self.generic_mousePressEvent(e)
 
     def spray_mouseMoveEvent(self, e):
         if self.last_pos:
@@ -289,48 +366,7 @@ class Canvas(QLabel):
             self.set_secondary_color(hex)
             self.secondary_color_updated.emit(hex)  # Update UI.
 
-    # Select rectangle events
-
-    def selectrect_mousePressEvent(self, e):
-        if self.current_pos:
-            # Clear up indicator.
-            self.timer_cleanup()
-            self.reset_mode()
-
-        self.origin_pos = e.pos()
-        self.current_pos = e.pos()
-        self.timer_event = self.selectrect_timerEvent
-
-    def selectrect_timerEvent(self, final=False):
-        p = QPainter(self.pixmap())
-        p.setCompositionMode(QPainter.RasterOp_SourceXorDestination)
-        pen = QPen(QColor(0xff, 0xff, 0xff), 1, Qt.DashLine)
-        pen.setDashOffset(self.dash_offset)
-        p.setPen(pen)
-        if self.last_pos:
-            p.drawRect(QRect(self.origin_pos, self.last_pos))
-
-        self.dash_offset -= 1
-        if not final:
-            pen.setDashOffset(self.dash_offset)
-            p.setPen(pen)
-            p.drawRect(QRect(self.origin_pos, self.current_pos))
-
-        self.update()
-        self.last_pos = self.current_pos
-
-    def selectrect_mouseMoveEvent(self, e):
-        if self.locked == False:
-            self.current_pos = e.pos()
-
-    def selectrect_mouseReleaseEvent(self, e):
-        self.current_pos = e.pos()
-        self.locked = True
-
-    def selectrect_copy(self):
-        return self.pixmap().copy(QRect(self.origin_pos, self.current_pos))
-
-    # Generic shape events: Rectangle & Ellipse
+    # Generic shape events: Rectangle, Ellipse, Rounded-rect
 
     def generic_shape_mousePressEvent(self, e):
         self.origin_pos = e.pos()
@@ -340,12 +376,16 @@ class Canvas(QLabel):
     def generic_shape_timerEvent(self, final=False):
         p = QPainter(self.pixmap())
         p.setCompositionMode(QPainter.RasterOp_SourceXorDestination)
-        pen = PREVIEW_PEN
+        pen = self.preview_pen
+        pen.setDashOffset(self.dash_offset)
         p.setPen(pen)
         if self.last_pos:
             getattr(p, self.active_shape_fn)(QRect(self.origin_pos, self.last_pos), *self.active_shape_args)
 
         if not final:
+            self.dash_offset -= 1
+            pen.setDashOffset(self.dash_offset)
+            p.setPen(pen)
             getattr(p, self.active_shape_fn)(QRect(self.origin_pos, self.current_pos), *self.active_shape_args)
 
         self.update()
@@ -369,18 +409,18 @@ class Canvas(QLabel):
 
         self.reset_mode()
 
-
     # Line events
 
     def line_mousePressEvent(self, e):
         self.origin_pos = e.pos()
         self.current_pos = e.pos()
+        self.preview_pen = PREVIEW_PEN
         self.timer_event = self.line_timerEvent
 
     def line_timerEvent(self, final=False):
         p = QPainter(self.pixmap())
         p.setCompositionMode(QPainter.RasterOp_SourceXorDestination)
-        pen = PREVIEW_PEN
+        pen = self.preview_pen
         p.setPen(pen)
         if self.last_pos:
             p.drawLine(self.origin_pos, self.last_pos)
@@ -417,7 +457,7 @@ class Canvas(QLabel):
                 self.current_pos = e.pos()
                 self.timer_event = self.generic_poly_timerEvent
 
-        if e.button() == Qt.RightButton and self.history_pos:
+        elif e.button() == Qt.RightButton and self.history_pos:
             # Clean up, we're not drawing
             self.timer_cleanup()
             self.reset_mode()
@@ -425,12 +465,16 @@ class Canvas(QLabel):
     def generic_poly_timerEvent(self, final=False):
         p = QPainter(self.pixmap())
         p.setCompositionMode(QPainter.RasterOp_SourceXorDestination)
-        pen = PREVIEW_PEN
+        pen = self.preview_pen
+        pen.setDashOffset(self.dash_offset)
         p.setPen(pen)
         if self.last_pos:
             getattr(p, self.active_shape_fn)(*self.history_pos + [self.last_pos])
 
         if not final:
+            self.dash_offset -= 1
+            pen.setDashOffset(self.dash_offset)
+            p.setPen(pen)
             getattr(p, self.active_shape_fn)(*self.history_pos + [self.current_pos])
 
         self.update()
@@ -456,6 +500,7 @@ class Canvas(QLabel):
 
     def polyline_mousePressEvent(self, e):
         self.active_shape_fn = 'drawPolyline'
+        self.preview_pen = PREVIEW_PEN
         self.generic_poly_mousePressEvent(e)
 
     def polyline_timerEvent(self, final=False):
@@ -472,6 +517,7 @@ class Canvas(QLabel):
     def rect_mousePressEvent(self, e):
         self.active_shape_fn = 'drawRect'
         self.active_shape_args = ()
+        self.preview_pen = PREVIEW_PEN
         self.generic_shape_mousePressEvent(e)
 
     def rect_timerEvent(self, final=False):
@@ -487,6 +533,7 @@ class Canvas(QLabel):
 
     def polygon_mousePressEvent(self, e):
         self.active_shape_fn = 'drawPolygon'
+        self.preview_pen = PREVIEW_PEN
         self.generic_poly_mousePressEvent(e)
 
     def polygon_timerEvent(self, final=False):
@@ -503,6 +550,7 @@ class Canvas(QLabel):
     def ellipse_mousePressEvent(self, e):
         self.active_shape_fn = 'drawEllipse'
         self.active_shape_args = ()
+        self.preview_pen = PREVIEW_PEN
         self.generic_shape_mousePressEvent(e)
 
     def ellipse_timerEvent(self, final=False):
@@ -519,6 +567,7 @@ class Canvas(QLabel):
     def roundrect_mousePressEvent(self, e):
         self.active_shape_fn = 'drawRoundedRect'
         self.active_shape_args = (25, 25)
+        self.preview_pen = PREVIEW_PEN
         self.generic_shape_mousePressEvent(e)
 
     def roundrect_timerEvent(self, final=False):
