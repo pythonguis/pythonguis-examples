@@ -48,7 +48,6 @@ class Canvas(QLabel):
 
     primary_color = QColor(Qt.black)
     secondary_color = None
-    background_color = QColor(Qt.white)
 
     primary_color_updated = pyqtSignal(str)
     secondary_color_updated = pyqtSignal(str)
@@ -58,13 +57,19 @@ class Canvas(QLabel):
 
     timer_event = None
 
+    current_stamp = None
 
+    def initialize(self):
+        self.background_color = QColor(self.secondary_color) if self.secondary_color else QColor(Qt.white)
+        self.eraser_color = QColor(self.secondary_color) if self.secondary_color else QColor(Qt.white)
+        self.eraser_color.setAlpha(100)
+        self.reset()
 
     def reset(self):
         # Create the pixmap for display.
         self.setPixmap(QPixmap(*CANVAS_DIMENSIONS))
-        self.eraser_color = self.secondary_color or QColor(Qt.white)
-        self.eraser_color.setAlpha(100)
+
+        # Clear the canvas.
         self.pixmap().fill(self.background_color)
 
     def set_primary_color(self, hex):
@@ -79,10 +84,18 @@ class Canvas(QLabel):
         # Reset mode-specific vars (all)
         self.active_shape_fn = None
         self.active_shape_args = ()
-        self.last_pos = None
-        self.current_pos = None
+
         self.origin_pos = None
+
+        self.current_pos = None
+        self.last_pos = None
+
         self.history_pos = None
+        self.last_history = []
+
+        self.current_text = ""
+        self.last_text = ""
+
         self.dash_offset = 0
         self.locked = False
         # Apply the mode
@@ -236,7 +249,7 @@ class Canvas(QLabel):
 
     def stamp_mousePressEvent(self, e):
         p = QPainter(self.pixmap())
-        stamp = QPixmap(random.choice(STAMPS))
+        stamp = self.current_stamp
         p.drawPixmap(e.x() - stamp.width() // 2, e.y() - stamp.height() // 2, stamp)
         self.update()
 
@@ -291,7 +304,50 @@ class Canvas(QLabel):
         self.update()
 
     def spray_mouseReleaseEvent(self, e):
-        return self.generic_mouseReleaseEvent(e)
+        self.generic_mouseReleaseEvent(e)
+
+    # Text events
+
+    def keyPressEvent(self, e):
+        if self.mode == 'text':
+            if e.key() == Qt.Key_Backspace:
+                self.current_text = self.current_text[:-1]
+            else:
+                self.current_text = self.current_text + e.text()
+
+    def text_mousePressEvent(self, e):
+        if e.button() == Qt.LeftButton:
+            self.current_pos = e.pos()
+            self.current_text = ""
+            self.timer_event = self.text_timerEvent
+
+        elif e.button() == Qt.RightButton and self.current_pos:
+            self.timer_cleanup()
+            # Draw the text to the image
+            p = QPainter(self.pixmap())
+            p.setRenderHints(QPainter.Antialiasing)
+            p.setFont(QFont("Times", 30))
+            pen = QPen(self.primary_color, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+            p.setPen(pen)
+            p.drawText(self.current_pos, self.current_text)
+            self.update()
+
+            self.reset_mode()
+
+    def text_timerEvent(self, final=False):
+        p = QPainter(self.pixmap())
+        p.setFont(QFont("Times", 30))
+        p.setCompositionMode(QPainter.RasterOp_SourceXorDestination)
+        pen = PREVIEW_PEN
+        p.setPen(pen)
+        if self.last_text:
+            p.drawText(self.current_pos, self.last_text)
+
+        if not final:
+            p.drawText(self.current_pos, self.current_text)
+
+        self.last_text = self.current_text
+        self.update()
 
     # Fill events
 
@@ -468,8 +524,8 @@ class Canvas(QLabel):
         pen = self.preview_pen
         pen.setDashOffset(self.dash_offset)
         p.setPen(pen)
-        if self.last_pos:
-            getattr(p, self.active_shape_fn)(*self.history_pos + [self.last_pos])
+        if self.last_history:
+            getattr(p, self.active_shape_fn)(*self.last_history)
 
         if not final:
             self.dash_offset -= 1
@@ -479,6 +535,7 @@ class Canvas(QLabel):
 
         self.update()
         self.last_pos = self.current_pos
+        self.last_history = self.history_pos + [self.current_pos]
 
     def generic_poly_mouseMoveEvent(self, e):
         self.current_pos = e.pos()
@@ -589,9 +646,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Replace canvas placeholder from QtDesigner.
         self.horizontalLayout.removeWidget(self.canvas)
         self.canvas = Canvas()
-        self.canvas.reset()
+        self.canvas.initialize()
         # We need to enable mouse tracking to follow the mouse without the button pressed.
         self.canvas.setMouseTracking(True)
+        # Enable focus to capture key inputs.
+        self.canvas.setFocusPolicy(Qt.StrongFocus)
         self.horizontalLayout.addWidget(self.canvas)
 
         # Setup the mode buttons
@@ -639,6 +698,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.canvas.primary_color_updated.connect(self.set_primary_color)
         self.canvas.secondary_color_updated.connect(self.set_secondary_color)
 
+        # Setup the stamp state.
+        self.current_stamp_n = -1
+        self.next_stamp()
+        self.stampnextButton.pressed.connect(self.next_stamp)
+
+        # Menu options
+        self.actionNewImage.triggered.connect(self.canvas.initialize)
+        self.actionOpenImage.triggered.connect(self.open_file)
+        self.actionSaveImage.triggered.connect(self.save_file)
+        self.actionClearImage.triggered.connect(self.canvas.reset)
+        self.actionInvertColors.triggered.connect(self.invert)
+        self.actionFlipHorizontal.triggered.connect(self.flip_horizontal)
+        self.actionFlipVertical.triggered.connect(self.flip_vertical)
+
         self.show()
 
     def choose_color(self, callback):
@@ -654,6 +727,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.canvas.set_secondary_color(hex)
         self.secondaryButton.setStyleSheet('QPushButton { background-color: %s; }' % hex)
 
+    def next_stamp(self):
+        self.current_stamp_n += 1
+        if self.current_stamp_n >= len(STAMPS):
+            self.current_stamp_n = 0
+
+        pixmap = QPixmap(STAMPS[self.current_stamp_n])
+        self.stampnextButton.setIcon(QIcon(pixmap))
+
+        self.canvas.current_stamp = pixmap
+
     def copy_to_clipboard(self):
         clipboard = QApplication.clipboard()
 
@@ -665,6 +748,69 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         else:
             clipboard.setPixmap(self.canvas.pixmap())
+
+    def open_file(self):
+        """
+        Open image file for editing, scaling the smaller dimension and cropping the remainder.
+        :return:
+        """
+        path, _ = QFileDialog.getOpenFileName(self, "Open file", "", "PNG image files (*.png); JPEG image files (*jpg); All files (*.*)")
+
+        if path:
+            pixmap = QPixmap()
+            pixmap.load(path)
+
+            # We need to crop down to the size of our canvas. Get the size of the loaded image.
+            iw = pixmap.width()
+            ih = pixmap.height()
+
+            # Get the size of the space we're filling.
+            cw, ch = CANVAS_DIMENSIONS
+
+            if iw/cw < ih/ch:  # The height is relatively bigger than the width.
+                pixmap = pixmap.scaledToWidth(cw)
+                hoff = (pixmap.height() - ch) // 2
+                pixmap = pixmap.copy(
+                    QRect(QPoint(0, hoff), QPoint(cw, pixmap.height()-hoff))
+                )
+
+            elif iw/cw > ih/ch:  # The height is relatively bigger than the width.
+                pixmap = pixmap.scaledToHeight(ch)
+                woff = (pixmap.width() - cw) // 2
+                pixmap = pixmap.copy(
+                    QRect(QPoint(woff, 0), QPoint(pixmap.width()-woff, ch))
+                )
+
+            self.canvas.setPixmap(pixmap)
+
+
+    def save_file(self):
+        """
+        Save active canvas to image file.
+        :return:
+        """
+        path, _ = QFileDialog.getSaveFileName(self, "Save file", "", "PNG Image file (*.png)")
+
+        if path:
+            pixmap = self.canvas.pixmap()
+            pixmap.save(path, "PNG" )
+
+    def invert(self):
+        img = QImage(self.canvas.pixmap())
+        img.invertPixels()
+        pixmap = QPixmap()
+        pixmap.convertFromImage(img)
+        self.canvas.setPixmap(pixmap)
+
+    def flip_horizontal(self):
+        pixmap = self.canvas.pixmap()
+        self.canvas.setPixmap(pixmap.transformed(QTransform().scale(-1, 1)))
+
+    def flip_vertical(self):
+        pixmap = self.canvas.pixmap()
+        self.canvas.setPixmap(pixmap.transformed(QTransform().scale(1, -1)))
+
+
 
 if __name__ == '__main__':
 
