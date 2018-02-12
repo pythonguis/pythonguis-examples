@@ -28,23 +28,24 @@ include the MIT license file when distributing.
 1. Webcam/Snapshot - "NSAViewer"
 1. Media Player - "Failamp"
 1. Post-it Notes - "Brown Note" (QtDesigner)
+1. Paint - "Piecasso" (QtDesigner)
+1. Translator - "Babelvis" (QtDesigner)
+1. Unzip - "7Pez" (QtDesigner)
 
 ## In progress
 
-1. Paint - "Piecasso" (QtDesigner)
-1. Translator - "Babelvis" (QtDesigner)
+1. Currency converter (QtDesigner, PyQtGraph)
+1. RSS Reader (QtDesigner)
 
 ## Up next
 
 1. Solitaire - "Ronery"
-1. Unzip - "7Pez" (QtDesigner)
-1. Address Book - "PeepKeep" (QtDesigner)
-1. RSS Reader 
 
 ## Maybe oneday
 
+1. Address Book - "PeepKeep" (QtDesigner)
 1. Photo Gallery - "PeepPeek"
-1. Vector Graphics - "Madcap Artisan"
+1. Vector Graphics - "Madcap Artist"
 1. Email - "GeeMail"
 1. IRC - "kIRC"
 1. Sound Editor

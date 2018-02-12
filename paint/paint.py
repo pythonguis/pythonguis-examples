@@ -2,9 +2,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-QPushButton.pressed_right = pyqtSignal()
-
-
 from MainWindow import Ui_MainWindow
 
 import os
@@ -12,7 +9,8 @@ import random
 import types
 
 
-SPRAY_PAINT_SD = 10
+BRUSH_MULT = 3
+SPRAY_PAINT_MULT = 5
 SPRAY_PAINT_N = 100
 
 COLORS = [
@@ -22,6 +20,8 @@ COLORS = [
     '#ffffff', '#c1c1c1', '#f70406', '#fffd00', '#08fb01', '#0bf8ee', '#0000fa',
     '#b92fc2', '#fffc91', '#00fd83', '#87f9f9', '#8481c4', '#dc137d', '#fb803c',
 ]
+
+FONT_SIZES = [7, 8, 9, 10, 11, 12, 13, 14, 18, 24, 36, 48, 64, 72, 96, 144, 288]
 
 MODES = [
     'selectpoly', 'selectrect',
@@ -42,6 +42,22 @@ STAMPS = [os.path.join(STAMP_DIR, f) for f in os.listdir(STAMP_DIR)]
 SELECTION_PEN = QPen(QColor(0xff, 0xff, 0xff), 1, Qt.DashLine)
 PREVIEW_PEN = QPen(QColor(0xff, 0xff, 0xff), 1, Qt.SolidLine)
 
+
+def build_font(config):
+    """
+    Construct a complete font from the configuration options
+    :param self:
+    :param config:
+    :return: QFont
+    """
+    font = config['font']
+    font.setPointSize(config['fontsize'])
+    font.setBold(config['bold'])
+    font.setItalic(config['italic'])
+    font.setUnderline(config['underline'])
+    return font
+
+
 class Canvas(QLabel):
 
     mode = 'rectangle'
@@ -51,6 +67,19 @@ class Canvas(QLabel):
 
     primary_color_updated = pyqtSignal(str)
     secondary_color_updated = pyqtSignal(str)
+
+    # Store configuration settings, including pen width, fonts etc.
+    config = {
+        # Drawing options.
+        'size': 1,
+        'fill': True,
+        # Font options.
+        'font': QFont('Times'),
+        'fontsize': 12,
+        'bold': False,
+        'italic': False,
+        'underline': False,
+    }
 
     active_color = None
     preview_pen = None
@@ -78,6 +107,9 @@ class Canvas(QLabel):
     def set_secondary_color(self, hex):
         self.secondary_color = QColor(hex)
 
+    def set_config(self, key, value):
+        self.config[key] = value
+
     def set_mode(self, mode):
         # Clean up active timer animations.
         self.timer_cleanup()
@@ -95,6 +127,8 @@ class Canvas(QLabel):
 
         self.current_text = ""
         self.last_text = ""
+
+        self.last_config = {}
 
         self.dash_offset = 0
         self.locked = False
@@ -261,7 +295,7 @@ class Canvas(QLabel):
     def pen_mouseMoveEvent(self, e):
         if self.last_pos:
             p = QPainter(self.pixmap())
-            p.setPen(QPen(self.active_color, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            p.setPen(QPen(self.active_color, self.config['size'], Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
             p.drawLine(self.last_pos, e.pos())
 
             self.last_pos = e.pos()
@@ -278,7 +312,7 @@ class Canvas(QLabel):
     def brush_mouseMoveEvent(self, e):
         if self.last_pos:
             p = QPainter(self.pixmap())
-            p.setPen(QPen(self.active_color, 10, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            p.setPen(QPen(self.active_color, self.config['size'] * BRUSH_MULT, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
             p.drawLine(self.last_pos, e.pos())
 
             self.last_pos = e.pos()
@@ -297,8 +331,9 @@ class Canvas(QLabel):
             p = QPainter(self.pixmap())
             p.setPen(QPen(self.active_color, 1))
 
-            for n in range(SPRAY_PAINT_N):
-                xo, yo = random.gauss(0, SPRAY_PAINT_SD), random.gauss(0, SPRAY_PAINT_SD)
+            for n in range(self.config['size'] * SPRAY_PAINT_N):
+                xo = random.gauss(0, self.config['size'] * SPRAY_PAINT_MULT)
+                yo = random.gauss(0, self.config['size'] * SPRAY_PAINT_MULT)
                 p.drawPoint(e.x() + xo, e.y() + yo)
 
         self.update()
@@ -316,7 +351,7 @@ class Canvas(QLabel):
                 self.current_text = self.current_text + e.text()
 
     def text_mousePressEvent(self, e):
-        if e.button() == Qt.LeftButton:
+        if e.button() == Qt.LeftButton and self.current_pos is None:
             self.current_pos = e.pos()
             self.current_text = ""
             self.timer_event = self.text_timerEvent
@@ -326,7 +361,8 @@ class Canvas(QLabel):
             # Draw the text to the image
             p = QPainter(self.pixmap())
             p.setRenderHints(QPainter.Antialiasing)
-            p.setFont(QFont("Times", 30))
+            font = build_font(self.config)
+            p.setFont(font)
             pen = QPen(self.primary_color, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
             p.setPen(pen)
             p.drawText(self.current_pos, self.current_text)
@@ -336,17 +372,21 @@ class Canvas(QLabel):
 
     def text_timerEvent(self, final=False):
         p = QPainter(self.pixmap())
-        p.setFont(QFont("Times", 30))
         p.setCompositionMode(QPainter.RasterOp_SourceXorDestination)
         pen = PREVIEW_PEN
         p.setPen(pen)
         if self.last_text:
+            font = build_font(self.last_config)
+            p.setFont(font)
             p.drawText(self.current_pos, self.last_text)
 
         if not final:
+            font = build_font(self.config)
+            p.setFont(font)
             p.drawText(self.current_pos, self.current_text)
 
         self.last_text = self.current_text
+        self.last_config = self.config.copy()
         self.update()
 
     # Fill events
@@ -456,9 +496,9 @@ class Canvas(QLabel):
             self.timer_cleanup()
 
             p = QPainter(self.pixmap())
-            p.setPen(QPen(self.primary_color, 5, Qt.SolidLine, Qt.SquareCap, Qt.MiterJoin))
+            p.setPen(QPen(self.primary_color, self.config['size'], Qt.SolidLine, Qt.SquareCap, Qt.MiterJoin))
 
-            if self.secondary_color:
+            if self.config['fill']:
                 p.setBrush(QBrush(self.secondary_color))
             getattr(p, self.active_shape_fn)(QRect(self.origin_pos, e.pos()), *self.active_shape_args)
             self.update()
@@ -711,6 +751,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionInvertColors.triggered.connect(self.invert)
         self.actionFlipHorizontal.triggered.connect(self.flip_horizontal)
         self.actionFlipVertical.triggered.connect(self.flip_vertical)
+
+        # Setup the drawing toolbar.
+        self.fontselect = QFontComboBox()
+        self.fontToolbar.addWidget(self.fontselect)
+        self.fontselect.currentFontChanged.connect(lambda f: self.canvas.set_config('font', f))
+        self.fontselect.setCurrentFont(QFont('Times'))
+
+        self.fontsize = QComboBox()
+        self.fontsize.addItems([str(s) for s in FONT_SIZES])
+        self.fontsize.currentTextChanged.connect(lambda f: self.canvas.set_config('fontsize', int(f)))
+
+        # Connect to the signal producing the text of the current selection. Convert the string to float
+        # and set as the pointsize. We could also use the index + retrieve from FONT_SIZES.
+        self.fontToolbar.addWidget(self.fontsize)
+
+        self.fontToolbar.addAction(self.actionBold)
+        self.actionBold.triggered.connect(lambda s: self.canvas.set_config('bold', s))
+        self.fontToolbar.addAction(self.actionItalic)
+        self.actionItalic.triggered.connect(lambda s: self.canvas.set_config('italic', s))
+        self.fontToolbar.addAction(self.actionUnderline)
+        self.actionUnderline.triggered.connect(lambda s: self.canvas.set_config('underline', s))
+
+        sizeicon = QLabel()
+        sizeicon.setPixmap(QPixmap(os.path.join('images', 'border-weight.png')))
+        self.drawingToolbar.addWidget(sizeicon)
+        self.sizeselect = QSlider()
+        self.sizeselect.setRange(1,20)
+        self.sizeselect.setOrientation(Qt.Horizontal)
+        self.sizeselect.valueChanged.connect(lambda s: self.canvas.set_config('size', s))
+        self.drawingToolbar.addWidget(self.sizeselect)
+
+        self.actionFillShapes.triggered.connect(lambda s: self.canvas.set_config('fill', s))
+        self.drawingToolbar.addAction(self.actionFillShapes)
+        self.actionFillShapes.setChecked(True)
 
         self.show()
 

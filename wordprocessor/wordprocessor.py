@@ -7,7 +7,7 @@ import os
 import sys
 import uuid
 
-FONT_SIZES = [9, 10, 11, 12, 13, 14, 18, 24, 36, 48, 64, 72, 96, 144, 288]
+FONT_SIZES = [7, 8, 9, 10, 11, 12, 13, 14, 18, 24, 36, 48, 64, 72, 96, 144, 288]
 IMAGE_EXTENSIONS = ['.jpg','.png','.bmp']
 HTML_EXTENSIONS = ['.htm', '.html']
 
@@ -187,7 +187,6 @@ class MainWindow(QMainWindow):
         format_toolbar.addWidget(self.fonts)
 
         self.fontsize = QComboBox()
-        self.fontsize.setEditable(True)
         self.fontsize.addItems([str(s) for s in FONT_SIZES])
 
         # Connect to the signal producing the text of the current selection. Convert the string to float
