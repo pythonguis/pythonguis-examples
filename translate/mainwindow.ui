@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Babelvis</string>
+   <string>Translataaaar</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -31,14 +31,14 @@
        <widget class="QPushButton" name="translateButton">
         <property name="minimumSize">
          <size>
-          <width>50</width>
-          <height>75</height>
+          <width>75</width>
+          <height>50</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>50</width>
-          <height>75</height>
+          <width>75</width>
+          <height>50</height>
          </size>
         </property>
         <property name="toolTip">
@@ -49,33 +49,13 @@
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>images/locale.png</normaloff>images/locale.png</iconset>
+          <normaloff>images/flag.png</normaloff>images/flag.png</iconset>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="reverseButton">
-        <property name="minimumSize">
+        <property name="iconSize">
          <size>
-          <width>50</width>
-          <height>75</height>
+          <width>75</width>
+          <height>50</height>
          </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>50</width>
-          <height>75</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Reverse translate</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>images/arrow-return-180.png</normaloff>images/arrow-return-180.png</iconset>
         </property>
        </widget>
       </item>
@@ -83,9 +63,6 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QComboBox" name="destLanguage"/>
-      </item>
       <item>
        <widget class="QTextEdit" name="destTextEdit"/>
       </item>

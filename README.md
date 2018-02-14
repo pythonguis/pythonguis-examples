@@ -14,8 +14,8 @@ found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 
 
 All code is **licensed under an MIT license**. This allows you to re-use the code freely,
-remixed in both commercial and non-commercial projects. The only requirement is that you must
-include the MIT license file when distributing.
+remixed in both commercial and non-commercial projects. The only requirement is to
+include the same license when distributing.
 
 ## Completed
 
@@ -29,13 +29,13 @@ include the MIT license file when distributing.
 1. Media Player - "Failamp"
 1. Post-it Notes - "Brown Note" (QtDesigner)
 1. Paint - "Piecasso" (QtDesigner)
-1. Translator - "Babelvis" (QtDesigner)
 1. Unzip - "7Pez" (QtDesigner)
+1. Translator - "Translataar" (QtDesigner)
+1. Weather - "Raindar" (QtDesigner)
 
 ## In progress
 
 1. Currency converter (QtDesigner, PyQtGraph)
-1. RSS Reader (QtDesigner)
 
 ## Up next
 
@@ -52,7 +52,6 @@ include the MIT license file when distributing.
 1. (Audio) Spectrum Analyzer
 1. IM (Jabber)
 1. FTP
-1. Weather
 1. Finance/Stocks
 1. Process Explorer
 1. Internet Radio
