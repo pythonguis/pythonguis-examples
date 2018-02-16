@@ -1,6 +1,6 @@
 # 15 Minute Apps
 
-A collection of 15 small (minute) desktop applications written in Python
+A collection of 15 small — *minute* — desktop applications written in Python
 using the PyQt framework. These apps are intended as examples from
 which you can poke, hack and prod your way to writing your own tools.
 
@@ -12,46 +12,29 @@ which covers everything you need to know to start building your own applications
 More articles, tutorials and projects using PyQt can be 
 found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 
+## The apps
 
-All code is **licensed under an MIT license**. This allows you to re-use the code freely,
-remixed in both commercial and non-commercial projects. The only requirement is to
-include the same license when distributing.
-
-## Completed
-
-1. Web Browser (untabbed) - "MooseAche"
-1. Web Browser (tabbed) - "Mozzarella Ashbadger"
-1. Minesweeper - "Moonsweeper"
-1. Notepad - "No2Pads"
-1. Calculator - "Calculon" (QtDesigner)
-1. Word Processor - "Megasolid Idiom"
-1. Webcam/Snapshot - "NSAViewer"
-1. Media Player - "Failamp"
-1. Post-it Notes - "Brown Note" (QtDesigner)
-1. Paint - "Piecasso" (QtDesigner)
-1. Unzip - "7Pez" (QtDesigner)
-1. Translator - "Translataar" (QtDesigner)
-1. Weather - "Raindar" (QtDesigner)
+1. [Web Browser (untabbed)](browser/) - "MooseAche"
+1. [Web Browser (tabbed)](browser_tabbed/) - "Mozzarella Ashbadger"
+1. [Minesweeper](minesweeper/) - "Moonsweeper"
+1. [Notepad](notepad/) - "No2Pads"
+1. [Calculator](calculator/) - "Calculon" (QtDesigner)
+1. [Word Processor](wordprocessor/) - "Megasolid Idiom"
+1. [Webcam/Snapshot](camera/) - "NSAViewer"
+1. [Media Player](mediaplayer/) - "Failamp"
+1. [Post-it Notes](notes/) - "Brown Note" (QtDesigner)
+1. [Paint](paint/) - "Piecasso" (QtDesigner)
+1. [Unzip](unzip/) - "7Pez" (QtDesigner)
+1. [Translator](translate/) - "Translataar" (QtDesigner)
+1. [Weather](weather/) - "Raindar" (QtDesigner)
 
 ## In progress
 
 1. Currency converter (QtDesigner, PyQtGraph)
-
-## Up next
-
 1. Solitaire - "Ronery"
 
-## Maybe oneday
+# License
 
-1. Address Book - "PeepKeep" (QtDesigner)
-1. Photo Gallery - "PeepPeek"
-1. Vector Graphics - "Madcap Artist"
-1. Email - "GeeMail"
-1. IRC - "kIRC"
-1. Sound Editor
-1. (Audio) Spectrum Analyzer
-1. IM (Jabber)
-1. FTP
-1. Finance/Stocks
-1. Process Explorer
-1. Internet Radio
+All code is **licensed under an MIT license**. This allows you to re-use the code freely,
+remixed in both commercial and non-commercial projects. The only requirement is to
+include the same license when distributing.
