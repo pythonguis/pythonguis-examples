@@ -55,6 +55,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Translataaaar"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Translataarrr"))
         self.translateButton.setToolTip(_translate("MainWindow", "Translate"))
 

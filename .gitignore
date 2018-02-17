@@ -64,3 +64,7 @@ target/
 Thumbs.db
 build/*
 dist
+
+# Database
+*.db
+*.sqlite

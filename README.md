@@ -25,12 +25,12 @@ found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 1. [Post-it Notes](notes/) - "Brown Note" (QtDesigner)
 1. [Paint](paint/) - "Piecasso" (QtDesigner)
 1. [Unzip](unzip/) - "7Pez" (QtDesigner)
-1. [Translator](translate/) - "Translataar" (QtDesigner)
+1. [Translator](translate/) - "Translataarrr" (QtDesigner)
 1. [Weather](weather/) - "Raindar" (QtDesigner)
 
 ## In progress
 
-1. Currency converter (QtDesigner, PyQtGraph)
+1. Currency converter - "Doughnut" (PyQtGraph)
 1. Solitaire - "Ronery"
 
 # License
