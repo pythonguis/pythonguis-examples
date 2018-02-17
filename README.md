@@ -27,10 +27,10 @@ found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 1. [Unzip](unzip/) - "7Pez" (QtDesigner)
 1. [Translator](translate/) - "Translataarrr" (QtDesigner)
 1. [Weather](weather/) - "Raindar" (QtDesigner)
+1. [Currency converter](currency/) - "Doughnut" (PyQtGraph)
 
 ## In progress
 
-1. Currency converter - "Doughnut" (PyQtGraph)
 1. Solitaire - "Ronery"
 
 # License
