@@ -26,6 +26,10 @@ QLabel {
 }
 """
 
+EXCLUDE_PATHS = [
+    '__MACOSX/',
+]
+
 class WorkerSignals(QObject):
     '''
     Defines the signals available from a running worker thread.
@@ -53,8 +57,10 @@ class UnzipWorker(QRunnable):
             total_n = len(items)
 
             for n, item in enumerate(items):
-                self.zipfile.extract(item)
-                self.signals.progress.emit(n/total_n)
+                if not any(item.filename.startswith(p) for p in EXCLUDE_PATHS):
+                    self.zipfile.extract(item)
+
+                self.signals.progress.emit(n / total_n)
 
         except Exception as e:
             exctype, value = sys.exc_info()[:2]

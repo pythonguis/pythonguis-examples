@@ -28,10 +28,7 @@ found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 1. [Translator](translate/) - "Translataarrr" (QtDesigner)
 1. [Weather](weather/) - "Raindar" (QtDesigner)
 1. [Currency converter](currency/) - "Doughnut" (PyQtGraph)
-
-## In progress
-
-1. Solitaire - "Ronery"
+1. [Solitaire](solitaire/) - "Ronery" (QGraphicsScene)
 
 # License
 
