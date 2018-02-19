@@ -7,7 +7,7 @@ explore the area around your landed space rocket, without coming too close to th
 deadly B'ug aliens. Your trusty tricounter will tell you the number of B'ugs in the
 vicinity.
 
-![Moonsweeper](screenshot-minesweeper1.png)
+![Moonsweeper](screenshot-minesweeper1.jpg)
 
 This a simple single-player exploration game modelled on _Minesweeper_
 where you must reveal all the tiles without hitting hidden mines.
@@ -16,7 +16,7 @@ individually hold their state as mines, status and the
 adjacent count of mines. In this version, the mines are replaced with
 alien bugs (B'ug) but they could just as easily be anything else.
 
-![Moonsweeper](screenshot-minesweeper2.png)
+![Moonsweeper](screenshot-minesweeper2.jpg)
 
 > If you think this example app is neat and want to learn more about
 PyQt in general, [take a look at my ebook & online course

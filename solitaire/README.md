@@ -5,13 +5,13 @@ The classic card Solitaire (Klondike) game with a North Korean /
  offering the same options. Built with PyQt, it uses QGraphicsScene
  to handle the play area.
 
-![Ronery](screenshot-solitaire1.png)
+![Ronery](screenshot-solitaire1.jpg)
 
 The classic Solitaire win-screen is also implemented, although since
 the play canvas is not a bitmap it doesn't "fill up". It's still
 sufficiently satisfying. 
 
-![Ronery](screenshot-solitaire2.png)
+![Ronery](screenshot-solitaire2.jpg)
 
 The configuration options allow for 3-draw and 1 draw styles, with 3, 5
 or infinite rounds.

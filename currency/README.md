@@ -3,12 +3,12 @@
 This is a simple currency exchange rate tracker implemented in PyQt, using the [fixer.io](http://fixer.io) API
 for data. The default setup shows currency data for the preceding 180 days.
 
-![Doughnut](screenshot-currency1.png)
+![Doughnut](screenshot-currency1.jpg)
 
 Data is loaded progressively, with increasing resolution. Currency rates for a given date are shown in the right
 hand panel and updated to follow the position of the mouse.
 
-![Doughnut](screenshot-currency2.png)
+![Doughnut](screenshot-currency2.jpg)
 
 > If you think this example app is neat and want to learn more about
 PyQt in general, [take a look at my ebook & online course
