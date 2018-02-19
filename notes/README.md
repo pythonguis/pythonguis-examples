@@ -5,6 +5,9 @@ are stored locally in a SQLite database.
 
 ![Brown note](screenshot-notes.png)
 
+This app is very simple, but demonstrates creation of decoration-less windows in PyQt. Removing the window
+decorations removes the means to drag windows around, so we must re-implement this behaviour ourselves.
+
 > If you think this example app is neat and want to learn more about
 PyQt in general, [take a look at my ebook & online course
 "Create Simple GUI Applications"](https://martinfitzpatrick.name/create-simple-gui-applications)

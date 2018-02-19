@@ -68,3 +68,6 @@ dist
 # Database
 *.db
 *.sqlite
+
+# Misc
+*.autosave

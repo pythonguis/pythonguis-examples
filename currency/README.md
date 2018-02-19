@@ -5,7 +5,7 @@ for data. The default setup shows currency data for the preceding 180 days.
 
 ![Doughnut](screenshot-currency1.png)
 
-Data is loaded progressively, with increasing resolution. Currency rates for a given data are shown in the right
+Data is loaded progressively, with increasing resolution. Currency rates for a given date are shown in the right
 hand panel and updated to follow the position of the mouse.
 
 ![Doughnut](screenshot-currency2.png)
@@ -17,7 +17,7 @@ which covers everything you need to know to start building your own applications
 
 ## Code notes
 
-# Data handling
+### Data handling
 
 The interface presents a tracking plot (using PyQtGraph) of rates over the past 180 days. Since we don't want to 
 spam a free service, requests to the API are rate-limited to 1-per-second, giving a full-data-load time of 180s (3 min).
@@ -27,10 +27,10 @@ requests. The requests for data use a progressive 'search' approach: where there
 point is filled first, and it prefers to load the most recent timepoints first. This means the whole plot gradually
 increases in resolution over time, rather than working backwards only.
 
-# Conversions
+### Conversions
 
 By default the app retrieves EUR rates and shows conversions to this base currency. If you change base currency
 it will retrieve all data again for that new currency. This is daft, since if we have rates vs. EUR we can calculate
-any other currency->currency conversion via EUR (with a potential loss of accuracy).
+any other currency->currency conversion via EUR (with a small loss of accuracy).
 
 
