@@ -34,3 +34,7 @@ it is on a non-mine spot. This allows us not to worry about the bad first move
 which would require us to recalculate the adjacencies.
 We can explain this away as the "initial exploration around the rocket"
 and make it sound completely sensible.
+
+## Other licenses
+
+Icons used in the application are by [Yusuke Kamiyaman](http://p.yusukekamiyamane.com/).
