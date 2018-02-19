@@ -34,19 +34,20 @@ a parent-child relationship, allowing multiple cards to be dragged at once.
 
 ### The end animation
 
-The end-game was a bit weird to implement. Since it happens 'outside' of
-game time the first thought was to have a self contained loop, using
-`QApplication.processEvents` to tick over. But that's nasty.
+The end-game was a bit weird to implement. Since it is self-contained
+and happens 'outside' of game time the first thought was to have a 
+separate fake event loop, hitting `QApplication.processEvents` to 
+tick over. But that's nasty.
 
-Instead I used a timer, idle during play, which constantly pings an
-animation step-forward endpoint. This moves cards (faking 'gravity', bouncing)
+Instead the animation is handled by a QTimer, normally idle during play, 
+which once triggered repeatedly pings an 
+animation step-forward slot. This moves cards (faking 'gravity', bouncing)
 as well as re-stacking them once they're out of the play area. 
-Restacking uses the normal stacking code.
-
-The final step was to block event handling, otherwise the cards could
-still be grabbed while they bounced (and dropped). The easiest way to 
-achieve this was to simply place an event-capturing object over the entire
-window.
+Restacking uses the normal stacking code so they can pile up.
+The final piece of the puzzle was to block user interaction, otherwise 
+the cards could still be grabbed and dropped they bounced.
+The easiest way to  achieve this is to place an object over the entire
+window which is set to capture (and discard) all mouse clicks.
 
 ## Other licenses
 
