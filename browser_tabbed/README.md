@@ -5,7 +5,7 @@ browsing! Go back and forward! Print! Save files! Get help!
 (you’ll need it). Any similarity to other browsers is entirely 
 coincidental.
 
-![Browser tabbed](screenshot-browser-tabbed.png)
+![Browser tabbed](screenshot-browser-tabbed.jpg)
 
 > If you think this example app is neat and want to learn more about
 PyQt in general, [take a look at my ebook & online course

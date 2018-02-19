@@ -3,7 +3,7 @@
 Get your daily weather and 15hr forecast. Data is provided by the free
 weather and forecast API from https://openweathermap.org/
 
-![Weather](screenshot-weather.png)
+![Weather](screenshot-weather.jpg)
 
 > If you think this example app is neat and want to learn more about
 PyQt in general, [take a look at my ebook & online course
