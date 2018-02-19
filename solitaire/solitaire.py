@@ -21,8 +21,7 @@ WORK_STACK_Y = 200
 SIDE_FACE = 0
 SIDE_BACK = 1
 
-SLIPPING_OFFSET = 20
-DEAL_N = 3
+BOUNCE_ENERGY = 0.8
 
 # We store cards as numbers 1-13, since we only need
 # to know their order for solitaire.
@@ -187,14 +186,6 @@ class StackBase(QGraphicsRectItem):
             card.stack = None
         self.cards = []
 
-    def take_top_card(self):
-        try:
-            card = self.cards[-1]
-            self.remove_card(card)
-            return card
-        except IndexError:
-            pass
-
     def is_valid_drop(self, card):
         return True
 
@@ -238,6 +229,14 @@ class DeckStack(StackBase):
             fromstack.remove_card(card)
             self.add_card(card)
             card.turn_back_up()
+
+    def take_top_card(self):
+        try:
+            card = self.cards[-1]
+            self.remove_card(card)
+            return card
+        except IndexError:
+            pass
 
     def set_color(self, color):
         color = QColor(color)
@@ -636,10 +635,11 @@ class MainWindow(QMainWindow):
     def win_animation(self):
         # Start off a new card
         for drop in self.drops:
-            card = drop.take_top_card()
-            if card and card.vector is None:
-                card.vector = QPoint(-random.randint(1, 10), 0)
-                break
+            if drop.cards:
+                card = drop.cards.pop()
+                if card.vector is None:
+                    card.vector = QPoint(-random.randint(1, 10), 0)
+                    break
 
         for card in self.deck:
             if card.vector is not None:
@@ -647,7 +647,8 @@ class MainWindow(QMainWindow):
                 card.vector += QPoint(0, 1)  # Gravity
 
                 if card.pos().y() > WINDOW_SIZE[1] - CARD_DIMENSIONS.height():
-                    card.vector = QPoint(card.vector.x(), -card.vector.y() )
+                    # Bounce the card, losing some energy.
+                    card.vector = QPoint(card.vector.x(), -int(card.vector.y() * BOUNCE_ENERGY) )
 
                 if card.pos().x() < - CARD_DIMENSIONS.width():
                     card.vector = None
