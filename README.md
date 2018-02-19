@@ -4,6 +4,16 @@ A collection of 15 small — *minute* — desktop applications written in Python
 using the PyQt framework. These apps are intended as examples from
 which you can poke, hack and prod your way to writing your own tools.
 
+## Want to build your own apps?
+
+> If you think these apps are neat and want to learn more about
+PyQt in general, [take a look at my ebook & online course
+"Create Simple GUI Applications"](https://martinfitzpatrick.name/create-simple-gui-applications)
+which covers everything you need to know to start building your own applications with PyQt.
+
+You can also find more PyQt articles, tutorials and projects 
+[on my website](http://martinfitzpatrick.name/tag/pyqt).
+
 ## The apps
 
 1. [Web Browser (untabbed)](browser/) - "MooseAche"
@@ -21,16 +31,6 @@ which you can poke, hack and prod your way to writing your own tools.
 1. [Weather](weather/) - "Raindar" (QtDesigner)
 1. [Currency converter](currency/) - "Doughnut" (PyQtGraph)
 1. [Solitaire](solitaire/) - "Ronery" (QGraphicsScene)
-
-## Want to build your own apps?
-
-> If you think these apps are neat and want to learn more about
-PyQt in general, [take a look at my ebook & online course
-"Create Simple GUI Applications"](https://martinfitzpatrick.name/create-simple-gui-applications)
-which covers everything you need to know to start building your own applications with PyQt.
-
-More articles, tutorials and projects using PyQt can be 
-found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 
 ## License
 
