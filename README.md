@@ -30,8 +30,12 @@ found [on my site](http://martinfitzpatrick.name/tag/pyqt).
 1. [Currency converter](currency/) - "Doughnut" (PyQtGraph)
 1. [Solitaire](solitaire/) - "Ronery" (QGraphicsScene)
 
-# License
+## License
 
 All code is **licensed under an MIT license**. This allows you to re-use the code freely,
 remixed in both commercial and non-commercial projects. The only requirement is to
 include the same license when distributing.
+
+## Other licenses
+
+Icons used in the applications are by [Yusuke Kamiyaman](http://p.yusukekamiyamane.com/).

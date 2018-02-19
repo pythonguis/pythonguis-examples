@@ -651,8 +651,8 @@ class MainWindow(QMainWindow):
 
                 if card.pos().x() < - CARD_DIMENSIONS.width():
                     card.vector = None
-                    drop = random.choice(self.drops)
-                    drop.add_card(card)
+                    # Put the card back where it started.
+                    card.stack.add_card(card)
 
 
 

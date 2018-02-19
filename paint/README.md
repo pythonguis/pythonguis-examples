@@ -6,16 +6,16 @@ ready made pictures of pie.
 Piecasso is a clone of the Paint programme from Windows 95 (ish) with a
 few additions (and subtractions). The programme features standard
 tools including pen, brush, fill, spray can, eraser, text and a number of
-shape drawing widgets. 
+shapes. 
 
-![Piecasso](screenshot-paint.png)
+![Piecasso](screenshot-paint2.png)
 
 You can copy from the image, with a custom shape,
 although pasting + floating is not supported. The canvas is a fixed size
 and loaded images are adjusted to fit. A stamp tool is also included
 which is pre-loaded with pictures of delicious pie.
 
-![Piecasso](screenshot-paint2.png)
+![Piecasso](screenshot-paint.png)
 
 > If you think this example app is neat and want to learn more about
 PyQt in general, [take a look at my ebook & online course
