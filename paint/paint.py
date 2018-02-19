@@ -356,7 +356,8 @@ class Canvas(QLabel):
             self.current_text = ""
             self.timer_event = self.text_timerEvent
 
-        elif e.button() == Qt.RightButton and self.current_pos:
+        elif e.button() == Qt.LeftButton:
+
             self.timer_cleanup()
             # Draw the text to the image
             p = QPainter(self.pixmap())
@@ -368,6 +369,9 @@ class Canvas(QLabel):
             p.drawText(self.current_pos, self.current_text)
             self.update()
 
+            self.reset_mode()
+
+        elif e.button() == Qt.RightButton and self.current_pos:
             self.reset_mode()
 
     def text_timerEvent(self, final=False):
@@ -536,7 +540,7 @@ class Canvas(QLabel):
             self.timer_cleanup()
 
             p = QPainter(self.pixmap())
-            p.setPen(QPen(self.primary_color, 5, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            p.setPen(QPen(self.primary_color, self.config['size'], Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
 
             p.drawLine(self.origin_pos, e.pos())
             self.update()
@@ -583,7 +587,7 @@ class Canvas(QLabel):
     def generic_poly_mouseDoubleClickEvent(self, e):
         self.timer_cleanup()
         p = QPainter(self.pixmap())
-        p.setPen(QPen(self.primary_color, 5, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+        p.setPen(QPen(self.primary_color, self.config['size'], Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
 
         # Note the brush is ignored for polylines.
         if self.secondary_color:

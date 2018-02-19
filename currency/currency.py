@@ -63,7 +63,7 @@ class WorkerSignals(QObject):
 
 class UpdateWorker(QRunnable):
     '''
-    Worker thread for unzipping.
+    Worker thread for updating currency.
     '''
     signals = WorkerSignals()
     is_interrupted = False
