@@ -638,17 +638,18 @@ class MainWindow(QMainWindow):
             if drop.cards:
                 card = drop.cards.pop()
                 if card.vector is None:
-                    card.vector = QPoint(-random.randint(1, 10), 0)
+                    card.vector = QPoint(-random.randint(3, 10), -random.randint(0, 10))
                     break
 
         for card in self.deck:
             if card.vector is not None:
                 card.setPos(card.pos() + card.vector)
                 card.vector += QPoint(0, 1)  # Gravity
-
                 if card.pos().y() > WINDOW_SIZE[1] - CARD_DIMENSIONS.height():
                     # Bounce the card, losing some energy.
-                    card.vector = QPoint(card.vector.x(), -int(card.vector.y() * BOUNCE_ENERGY) )
+                    card.vector = QPoint(card.vector.x(), -max(1, int(card.vector.y() * BOUNCE_ENERGY)) )
+                    # Bump back up to base of screen.
+                    card.setPos(card.pos().x(), WINDOW_SIZE[1] - CARD_DIMENSIONS.height())
 
                 if card.pos().x() < - CARD_DIMENSIONS.width():
                     card.vector = None
