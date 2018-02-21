@@ -4,16 +4,6 @@ A collection of 15 small — *minute* — desktop applications written in Python
 using the PyQt framework. These apps are intended as examples from
 which you can poke, hack and prod your way to writing your own tools.
 
-## Want to build your own apps?
-
-> If you think these apps are neat and want to learn more about
-PyQt in general, [take a look at my ebook & online course
-"Create Simple GUI Applications"](https://martinfitzpatrick.name/create-simple-gui-applications)
-which covers everything you need to know to start building your own applications with PyQt.
-
-You can also find more PyQt articles, tutorials and projects 
-[on my website](http://martinfitzpatrick.name/tag/pyqt).
-
 ## The apps
 
 The apps showcase various parts of the Qt framework, including advanced widgets,
@@ -50,6 +40,16 @@ Once the requirements are installed, you can run the app using Python 3.
     python3 <filename>.py
  
 The application window should appear.
+
+## Want to build your own apps?
+
+> If you think these apps are neat and want to learn more about
+PyQt in general, [take a look at my ebook & online course
+"Create Simple GUI Applications"](https://martinfitzpatrick.name/create-simple-gui-applications)
+which covers everything you need to know to start building your own applications with PyQt.
+
+You can also find more PyQt articles, tutorials and projects 
+[on my website](http://martinfitzpatrick.name/tag/pyqt).
 
 ## License
 
