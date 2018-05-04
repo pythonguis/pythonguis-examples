@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication
+import PyQt5.QtWidgets as qtwidget
 
 import operator
 
@@ -9,7 +9,7 @@ READY = 0
 INPUT = 1
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):
+class MainWindow(qtwidget.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
@@ -96,7 +96,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = qtwidget.QApplication([])
     app.setApplicationName("Calculon")
 
     window = MainWindow()
