@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 
 import random
 import time
+import sys
 
 IMG_BOMB = QImage("./images/bug.png")
 IMG_FLAG = QImage("./images/flag.png")
@@ -42,7 +43,9 @@ STATUS_ICONS = {
 
 class Pos(QWidget):
     expandable = pyqtSignal(int, int)
+    expandable_safe = pyqtSignal(int, int)
     clicked = pyqtSignal()
+    flagged = pyqtSignal(bool)
     ohno = pyqtSignal()
 
     def __init__(self, x, y, *args, **kwargs):
@@ -102,38 +105,50 @@ class Pos(QWidget):
     def toggle_flag(self):
         self.is_flagged = not self.is_flagged
         self.update()
+        self.flagged.emit(self.is_flagged)
 
-        self.clicked.emit()
-
-    def reveal(self):
+    def reveal_self(self):
         self.is_revealed = True
         self.update()
 
-    def click(self):
+    def reveal(self):
         if not self.is_revealed:
-            self.reveal()
+            self.reveal_self()
             if self.adjacent_n == 0:
                 self.expandable.emit(self.x, self.y)
 
-        self.clicked.emit()
-
-    def mouseReleaseEvent(self, e):
-
-        if (e.button() == Qt.RightButton and not self.is_revealed):
-            self.toggle_flag()
-
-        elif (e.button() == Qt.LeftButton):
-            self.click()
-
             if self.is_mine:
                 self.ohno.emit()
+
+    def click(self):
+        if not self.is_revealed and not self.is_flagged:
+            self.reveal()
+
+    def mouseReleaseEvent(self, e):
+        self.clicked.emit()
+        if e.button() == Qt.RightButton:
+            if not self.is_revealed:
+                self.toggle_flag()
+            else:
+                self.expandable_safe.emit(self.x, self.y)
+
+        elif e.button() == Qt.LeftButton:
+            self.click()
+        self.clicked.emit()
+
 
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-
-        self.b_size, self.n_mines = LEVELS[1]
+        
+        app = QApplication.instance()
+        app_args = app.arguments()
+        
+        self.level = int(app_args[1]) if len(app_args) == 2 and app_args[1].isnumeric() else 1
+        if self.level < 0 or self.level > len(LEVELS):
+            raise ValueError('level out of bounds')
+        self.b_size, self.n_mines = LEVELS[self.level]
 
         w = QWidget()
         hb = QHBoxLayout()
@@ -153,9 +168,6 @@ class MainWindow(QMainWindow):
         self._timer = QTimer()
         self._timer.timeout.connect(self.update_timer)
         self._timer.start(1000)  # 1 second timer
-
-        self.mines.setText("%03d" % self.n_mines)
-        self.clock.setText("000")
 
         self.button = QPushButton()
         self.button.setFixedSize(QSize(32, 32))
@@ -195,6 +207,7 @@ class MainWindow(QMainWindow):
         self.reset_map()
         self.update_status(STATUS_READY)
 
+        self.setWindowTitle("Minesweeper")
         self.show()
 
     def init_map(self):
@@ -206,14 +219,18 @@ class MainWindow(QMainWindow):
                 # Connect signal to handle expansion.
                 w.clicked.connect(self.trigger_start)
                 w.expandable.connect(self.expand_reveal)
+                w.expandable_safe.connect(self.expand_reveal_if_looks_safe)
+                w.flagged.connect(self.flag_toggled)
                 w.ohno.connect(self.game_over)
 
     def reset_map(self):
+        self.n_mines = LEVELS[self.level][1]
+        self.mines.setText("%03d" % self.n_mines)
+        self.clock.setText("000")
+        
         # Clear all mine positions
-        for x in range(0, self.b_size):
-            for y in range(0, self.b_size):
-                w = self.grid.itemAtPosition(y, x).widget()
-                w.reset()
+        for _, _, w in self.get_all():
+            w.reset()
 
         # Add mines to the positions
         positions = []
@@ -231,10 +248,8 @@ class MainWindow(QMainWindow):
             return n_mines
 
         # Add adjacencies to the positions
-        for x in range(0, self.b_size):
-            for y in range(0, self.b_size):
-                w = self.grid.itemAtPosition(y, x).widget()
-                w.adjacent_n = get_adjacency_n(x, y)
+        for x, y, w in self.get_all():
+            w.adjacent_n = get_adjacency_n(x, y)
 
         # Place starting marker
         while True:
@@ -242,7 +257,6 @@ class MainWindow(QMainWindow):
             w = self.grid.itemAtPosition(y, x).widget()
             # We don't want to start on a mine.
             if (x, y) not in positions:
-                w = self.grid.itemAtPosition(y, x).widget()
                 w.is_start = True
 
                 # Reveal all positions around this, if they are not mines either.
@@ -250,6 +264,11 @@ class MainWindow(QMainWindow):
                     if not w.is_mine:
                         w.click()
                 break
+
+    def get_all(self):
+        for x in range(0, self.b_size):
+            for y in range(0, self.b_size):
+                yield (x, y, self.grid.itemAtPosition(y, x).widget())
 
     def get_surrounding(self, x, y):
         positions = []
@@ -265,29 +284,36 @@ class MainWindow(QMainWindow):
             self.update_status(STATUS_FAILED)
             self.reveal_map()
 
-        elif self.status == STATUS_FAILED:
+        elif self.status in (STATUS_FAILED, STATUS_SUCCESS):
             self.update_status(STATUS_READY)
             self.reset_map()
 
     def reveal_map(self):
-        for x in range(0, self.b_size):
-            for y in range(0, self.b_size):
-                w = self.grid.itemAtPosition(y, x).widget()
+        for _, _, w in self.get_all():
+            w.reveal_self()
+
+    def expand_reveal(self, x, y, force=False):
+        for w in self.get_surrounding(x, y):
+            if (force or not w.is_mine) and not w.is_flagged:
                 w.reveal()
 
-    def expand_reveal(self, x, y):
-        for xi in range(max(0, x - 1), min(x + 2, self.b_size)):
-            for yi in range(max(0, y - 1), min(y + 2, self.b_size)):
-                w = self.grid.itemAtPosition(yi, xi).widget()
-                if not w.is_mine:
-                    w.click()
+    def expand_reveal_if_looks_safe(self, x, y):
+        flagged_count = 0
+        for w in self.get_surrounding(x, y):
+            if w.is_flagged:
+                flagged_count += 1
+        w = self.grid.itemAtPosition(y, x).widget()
+        if flagged_count == w.adjacent_n:
+            self.expand_reveal(x, y, True) # TODO: reveal all where flags match the adjacents, not just those surrounding this tile and its relatives with 0 adjacents
 
     def trigger_start(self, *args):
-        if self.status != STATUS_PLAYING:
+        if self.status == STATUS_READY:
             # First click.
             self.update_status(STATUS_PLAYING)
             # Start timer.
             self._timer_start_nsecs = int(time.time())
+        elif self.status == STATUS_PLAYING:
+            self.check_win_condition()
 
     def update_status(self, status):
         self.status = status
@@ -302,8 +328,20 @@ class MainWindow(QMainWindow):
         self.reveal_map()
         self.update_status(STATUS_FAILED)
 
+    def flag_toggled(self, flagged):
+        adjustment = -1 if flagged else 1
+        self.n_mines += adjustment
+        self.mines.setText("%03d" % self.n_mines)
+        #self.check_win_condition()
+
+    def check_win_condition(self):
+        if self.n_mines == 0:
+            if all(w.is_revealed or w.is_flagged for _, _, w in self.get_all()):
+                self.update_status(STATUS_SUCCESS)
+        # TODO: if the only unrevealed squares are mines, then no need to flag them, the player wins
+
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QApplication(sys.argv)
     window = MainWindow()
     app.exec_()
