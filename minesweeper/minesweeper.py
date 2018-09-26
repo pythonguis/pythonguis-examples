@@ -99,8 +99,8 @@ class Pos(QWidget):
         elif self.is_flagged:
             p.drawPixmap(r, QPixmap(IMG_FLAG))
 
-    def flag(self):
-        self.is_flagged = True
+    def toggle_flag(self):
+        self.is_flagged = not self.is_flagged
         self.update()
 
         self.clicked.emit()
@@ -120,7 +120,7 @@ class Pos(QWidget):
     def mouseReleaseEvent(self, e):
 
         if (e.button() == Qt.RightButton and not self.is_revealed):
-            self.flag()
+            self.toggle_flag()
 
         elif (e.button() == Qt.LeftButton):
             self.click()
