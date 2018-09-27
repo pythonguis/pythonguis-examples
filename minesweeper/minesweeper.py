@@ -63,6 +63,7 @@ class Pos(QWidget):
 
         self.is_revealed = False
         self.is_flagged = False
+        self.is_end = False
 
         self.update()
 
@@ -75,6 +76,8 @@ class Pos(QWidget):
         if self.is_revealed:
             color = self.palette().color(QPalette.Background)
             outer, inner = color, color
+            if self.is_end:
+                inner = NUM_COLORS[1]
         else:
             outer, inner = Qt.gray, Qt.lightGray
 
@@ -118,6 +121,7 @@ class Pos(QWidget):
                 self.expandable.emit(self.x, self.y)
 
             if self.is_mine:
+                self.is_end = True
                 self.ohno.emit()
 
     def click(self):
