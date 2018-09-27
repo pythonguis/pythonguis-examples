@@ -246,7 +246,7 @@ class MainWindow(QMainWindow):
                 positions.append((x, y))
 
         def get_adjacency_n(x, y):
-            positions = self.get_surrounding(x, y)
+            positions = [w for _, _, w in self.get_surrounding(x, y)]
             n_mines = sum(1 if w.is_mine else 0 for w in positions)
 
             return n_mines
@@ -264,7 +264,7 @@ class MainWindow(QMainWindow):
                 w.is_start = True
 
                 # Reveal all positions around this, if they are not mines either.
-                for w in self.get_surrounding(x, y):
+                for _, _, w in self.get_surrounding(x, y):
                     if not w.is_mine:
                         w.click()
                 break
@@ -279,7 +279,7 @@ class MainWindow(QMainWindow):
 
         for xi in range(max(0, x - 1), min(x + 2, self.b_size)):
             for yi in range(max(0, y - 1), min(y + 2, self.b_size)):
-                positions.append(self.grid.itemAtPosition(yi, xi).widget())
+                positions.append((xi, yi, self.grid.itemAtPosition(yi, xi).widget()))
 
         return positions
 
@@ -296,19 +296,32 @@ class MainWindow(QMainWindow):
         for _, _, w in self.get_all():
             w.reveal_self()
 
-    def expand_reveal(self, x, y, force=False):
-        for w in self.get_surrounding(x, y):
+    def get_revealable_around(self, x, y, force=False):
+        for xi, yi, w in self.get_surrounding(x, y):
             if (force or not w.is_mine) and not w.is_flagged:
-                w.reveal()
+                yield (xi, yi, w)
 
-    def expand_reveal_if_looks_safe(self, x, y):
+    def expand_reveal(self, x, y, force=False):
+        for _, _, w in self.get_revealable_around(x, y, force):
+            w.reveal()
+
+    def determine_revealable_around_looks_safe(self, x, y, existing):
         flagged_count = 0
-        for w in self.get_surrounding(x, y):
+        for _, _, w in self.get_surrounding(x, y):
             if w.is_flagged:
                 flagged_count += 1
         w = self.grid.itemAtPosition(y, x).widget()
         if flagged_count == w.adjacent_n:
-            self.expand_reveal(x, y, True) # TODO: reveal all where flags match the adjacents, not just those surrounding this tile and its relatives with 0 adjacents
+            for xi, yi, w in self.get_revealable_around(x, y, True):
+                if (xi, yi) not in ((xq, yq) for xq, yq, _ in existing):
+                    existing.append((xi, yi, w))
+                    self.determine_revealable_around_looks_safe(xi, yi, existing)
+
+    def expand_reveal_if_looks_safe(self, x, y):
+        reveal = []
+        self.determine_revealable_around_looks_safe(x, y, reveal)
+        for _, _, w in reveal:
+            w.reveal()
 
     def trigger_start(self, *args):
         if self.status == STATUS_READY:
