@@ -76,7 +76,7 @@ class Pos(QWidget):
         if self.is_revealed:
             color = self.palette().color(QPalette.Background)
             outer, inner = color, color
-            if self.is_end:
+            if self.is_end or (self.is_flagged and not self.is_mine):
                 inner = NUM_COLORS[1]
         else:
             outer, inner = Qt.gray, Qt.lightGray
@@ -294,7 +294,9 @@ class MainWindow(QMainWindow):
 
     def reveal_map(self):
         for _, _, w in self.get_all():
-            w.reveal_self()
+            # don't reveal correct flags
+            if not (w.is_flagged and w.is_mine):
+                w.reveal_self()
 
     def get_revealable_around(self, x, y, force=False):
         for xi, yi, w in self.get_surrounding(x, y):
@@ -355,7 +357,20 @@ class MainWindow(QMainWindow):
         if self.n_mines == 0:
             if all(w.is_revealed or w.is_flagged for _, _, w in self.get_all()):
                 self.update_status(STATUS_SUCCESS)
-        # TODO: if the only unrevealed squares are mines, then no need to flag them, the player wins
+        else:
+            # if the only unrevealed squares are mines
+            unrevealed = []
+            for _, _, w in self.get_all():
+                if not w.is_revealed and not w.is_flagged:
+                    unrevealed.append(w)
+                    if len(unrevealed) > self.n_mines or not w.is_mine:
+                        return
+            if len(unrevealed) == self.n_mines:
+                # check that all the existing flags are correct, then no need to flag the unrevealed squares manually, the player wins
+                if all(w.is_flagged == w.is_mine or w in unrevealed for _, _, w in self.get_all()):
+                    for w in unrevealed:
+                        w.toggle_flag()
+                    self.update_status(STATUS_SUCCESS)
 
 
 if __name__ == '__main__':
