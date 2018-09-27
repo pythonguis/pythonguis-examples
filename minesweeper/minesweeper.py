@@ -300,7 +300,7 @@ class MainWindow(QMainWindow):
 
     def get_revealable_around(self, x, y, force=False):
         for xi, yi, w in self.get_surrounding(x, y):
-            if (force or not w.is_mine) and not w.is_flagged:
+            if (force or not w.is_mine) and not w.is_flagged and not w.is_revealed:
                 yield (xi, yi, w)
 
     def expand_reveal(self, x, y, force=False):
