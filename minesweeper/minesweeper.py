@@ -211,7 +211,7 @@ class MainWindow(QMainWindow):
         self.reset_map()
         self.update_status(STATUS_READY)
 
-        self.setWindowTitle("Minesweeper")
+        self.setWindowTitle("Moonsweeper")
         self.show()
 
     def init_map(self):
