@@ -260,7 +260,7 @@ class MainWindow(QMainWindow):
             x, y = random.randint(0, self.b_size - 1), random.randint(0, self.b_size - 1)
             w = self.grid.itemAtPosition(y, x).widget()
             # We don't want to start on a mine.
-            if (x, y) not in positions:
+            if (x, y) not in positions and not w.adjacent_n:
                 w.is_start = True
 
                 # Reveal all positions around this, if they are not mines either.
