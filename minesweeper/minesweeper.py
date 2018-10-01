@@ -255,19 +255,17 @@ class MainWindow(QMainWindow):
         for x, y, w in self.get_all():
             w.adjacent_n = get_adjacency_n(x, y)
 
-        # Place starting marker
-        while True:
-            x, y = random.randint(0, self.b_size - 1), random.randint(0, self.b_size - 1)
-            w = self.grid.itemAtPosition(y, x).widget()
-            # We don't want to start on a mine.
-            if (x, y) not in positions and not w.adjacent_n:
-                w.is_start = True
+        # Place starting marker - we don't want to start on a mine
+        # or adjacent to a mine because the start marker will hide the adjacency number.
+        no_adjacent = [(x, y, w) for x, y, w in self.get_all() if not w.adjacent_n and not w.is_mine]
+        idx = random.randint(0, len(no_adjacent) - 1)
+        x, y, w = no_adjacent[idx]
+        w.is_start = True
 
-                # Reveal all positions around this, if they are not mines either.
-                for _, _, w in self.get_surrounding(x, y):
-                    if not w.is_mine:
-                        w.click()
-                break
+        # Reveal all positions around this, if they are not mines either.
+        for _, _, w in self.get_surrounding(x, y):
+            if not w.is_mine:
+                w.click()
 
     def get_all(self):
         for x in range(0, self.b_size):
