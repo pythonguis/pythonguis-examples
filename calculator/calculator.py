@@ -33,6 +33,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionReset.triggered.connect(self.reset)
         self.pushButton_ac.pressed.connect(self.reset)
 
+        self.actionExit.triggered.connect(self.close)
+
         self.pushButton_m.pressed.connect(self.memory_store)
         self.pushButton_mr.pressed.connect(self.memory_recall)
 
