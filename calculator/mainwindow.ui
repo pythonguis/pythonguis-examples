@@ -550,14 +550,14 @@ color: #4CAF50;
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFIle">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>FIle</string>
+     <string>File</string>
     </property>
     <addaction name="actionReset"/>
     <addaction name="actionExit"/>
    </widget>
-   <addaction name="menuFIle"/>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
