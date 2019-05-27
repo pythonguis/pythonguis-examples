@@ -159,7 +159,7 @@ class MainWindow(QMainWindow):
                                                   "All files (*.*)")
 
         if filename:
-            html = self.browser.page().mainFrame().toHtml()
+            html = self.browser.page().toHtml()
             with open(filename, 'w') as f:
                 f.write(html)
 

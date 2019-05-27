@@ -402,27 +402,14 @@ class Canvas(QLabel):
         else:
             self.active_color = self.secondary_color
 
-        # Convert to image for pixel-by-pixel reading.
         image = self.pixmap().toImage()
         w, h = image.width(), image.height()
-        s = image.bits().asstring(w * h * 4)
-
         x, y = e.x(), e.y()
-        # Lookup the 3-byte value at our current location.
-        i = (x + (y * w)) * 4
-        target_color = s[i:i+3]
 
-        # Convert bytestring to 1byte pp. true/false for matching colour. True values
-        # will be 255, non-matching 0. Simplifies the lookup in get_pixel and
-        # comparison in the main loop giving slight performance increase.
-        s = b''.join(b'\xff' if s[n:n+3] == target_color else b'\x00' for n in range(0, len(s), 4))
-
-        def get_pixel(x, y):
-            i = (x + (y * w))
-            return s[i]
+        # Get our target color from origin.
+        target_color = image.pixel(x,y)
 
         have_seen = set()
-        to_fill = []
         queue = [(x, y)]
 
         def get_cardinal_points(have_seen, center_pos):
@@ -439,18 +426,17 @@ class Canvas(QLabel):
 
             return points
 
+        # Now perform the search and fill.
+        p = QPainter(self.pixmap())
+        p.setPen(QPen(self.active_color))
+
         while queue:
             x, y = queue.pop()
-            if get_pixel(x, y):  # 255 for a match (True) or 0 for a miss (False)
-                to_fill.append((x,y))
+            if image.pixel(x, y) == target_color:
+                p.drawPoint(QPoint(x, y))
                 queue.extend(get_cardinal_points(have_seen, (x, y)))
 
-        if to_fill:
-            # Now we have the points, perform the fill.
-            p = QPainter(self.pixmap())
-            p.setPen(QPen(self.active_color))
-            p.drawPoints(*[QPoint(*xy) for xy in to_fill])
-            self.update()
+        self.update()
 
     # Dropper events
 

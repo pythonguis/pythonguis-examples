@@ -56,7 +56,7 @@ class UnzipWorker(QRunnable):
             items = self.zipfile.infolist()
             total_n = len(items)
 
-            for n, item in enumerate(items):
+            for n, item in enumerate(items, 1):
                 if not any(item.filename.startswith(p) for p in EXCLUDE_PATHS):
                     self.zipfile.extract(item)
 
@@ -99,7 +99,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 # Perform the unzip
                 self.threadpool.start(self.worker)
-                self.worker = None  # Remove the worker so it is not double-triggere.
+                self.worker = None  # Remove the worker so it is not double-triggered.
 
             elif e.button() == Qt.RightButton:
                 pass # Open a new zip.
@@ -201,10 +201,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
 
     def unzip_finished(self):
-        self.update_progress(1)
+        pass
 
     def unzip_error(self, err):
         exctype, value, traceback = err
+
+        self.update_progress(1)  # Reset the Pez bar.
 
         dlg = QMessageBox(self)
         dlg.setText(traceback)

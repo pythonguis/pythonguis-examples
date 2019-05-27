@@ -91,10 +91,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.current_op:
             self.last_operation = self.stack[-1], self.current_op
 
-            self.stack = [self.current_op(*self.stack)]
-            self.current_op = None
-            self.state = READY
-            self.display()
+            try:
+                self.stack = [self.current_op(*self.stack)]
+            except Exception:
+                self.lcdNumber.display('Err')
+                self.stack = [0]
+            else:
+                self.current_op = None
+                self.state = READY
+                self.display()
 
 
 if __name__ == '__main__':

@@ -68,7 +68,6 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
         self.editor = TextEdit()
         # Setup the QTextEdit editor configuration
-        self.editor.setAcceptRichText(False)
         self.editor.setAutoFormatting(QTextEdit.AutoAll)
         self.editor.selectionChanged.connect(self.update_format)
         # Initialize default font size.

@@ -73,9 +73,6 @@ class MainWindow(QMainWindow):
         self.save_seq = 0
 
     def take_photo(self):
-        self.viewfinder.setContrast(100)
-        #self.viewfinder.setBrightness(0)
-
         timestamp = time.strftime("%d-%b-%Y-%H_%M_%S")
         self.capture.capture(os.path.join(self.save_path, "%s-%04d-%s.jpg" % (
             self.current_camera_name,

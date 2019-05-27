@@ -208,7 +208,7 @@ class MainWindow(QMainWindow):
                                                   "All files (*.*)")
 
         if filename:
-            html = self.tabs.currentWidget().page().mainFrame().toHtml()
+            html = self.tabs.currentWidget().page().toHtml()
             with open(filename, 'w') as f:
                 f.write(html.encode('utf8'))
 

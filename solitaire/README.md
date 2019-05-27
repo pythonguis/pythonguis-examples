@@ -59,3 +59,8 @@ Note that the linked repository contains some custom art on ace cards which may 
 was not used.
 
 Icons used in the application are by [Yusuke Kamiyaman](http://p.yusukekamiyamane.com/).
+
+
+> If you think this app is neat and want to learn more about
+PyQt in general, take a look at my [free PyQt tutorials](https://www.learnpyqt.com)
+which cover everything you need to know to start building your own applications with PyQt.

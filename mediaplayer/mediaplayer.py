@@ -118,15 +118,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.model.layoutChanged.emit()
 
-    def update_duration(self, mc):
-        self.timeSlider.setMaximum(self.player.duration())
-        duration = self.player.duration()
+    def update_duration(self, duration):
+        print("!", duration)
+        print("?", self.player.duration())
+        
+        self.timeSlider.setMaximum(duration)
 
         if duration >= 0:
             self.totalTimeLabel.setText(hhmmss(duration))
 
-    def update_position(self, *args):
-        position = self.player.position()
+    def update_position(self, position):
         if position >= 0:
             self.currentTimeLabel.setText(hhmmss(position))
 
