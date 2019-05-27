@@ -4,6 +4,8 @@ A collection of 15 small — *minute* — desktop applications written in Python
 using the PyQt framework. These apps are intended as examples from
 which you can poke, hack and prod your way to writing your own tools.
 
+> Many of these apps have more detailed write-ups on my tutorials site at [LearnPyQt.com](https://www.learnpyqt.com/apps/).
+
 ## The apps
 
 The apps showcase various parts of the Qt framework, including advanced widgets,
