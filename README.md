@@ -44,11 +44,10 @@ The application window should appear.
 ## Want to build your own apps?
 
 > If you think these apps are neat and want to learn more about
-PyQt in general, take a look at [my free online tutorials](https://www.learnpyqt.com)
-which cover everything you need to know to start building your own applications with PyQt.
+PyQt in general, [take a look at my PyQt5 tutorial site LearnPyQt.com](https://www.learnpyqt.com)
+which covers everything you need to know to start building your own applications with PyQt.
 
-You can also find write-ups about these apps  
-[here](http://www.learnpyqt.com/apps).
+You can also find write-ups about these "minute apps" [on the same site](http://www.learnpyqt.com/apps).
 
 ## License
 
