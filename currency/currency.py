@@ -14,7 +14,7 @@ import sys
 import time
 import traceback
 
-requests_cache.install_cache('fixerio_cache')
+requests_cache.install_cache('http_cache')
 
 # Base currency is used to retrieve rates from fixer.io.
 # If we change currency we re-request, though it would

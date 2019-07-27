@@ -1,0 +1,5 @@
+PyQt5>=5.6
+sip
+requests>=2.0.0
+requests_cache>=0.4.13
+pyqtgraph>=0.10
