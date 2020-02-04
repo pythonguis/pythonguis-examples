@@ -602,21 +602,18 @@ class Canvas(QLabel):
     # Rectangle events
 
     def rect_mousePressEvent(self, e):
-        print('press', e.pos())
         self.active_shape_fn = 'drawRect'
         self.active_shape_args = ()
         self.preview_pen = PREVIEW_PEN
         self.generic_shape_mousePressEvent(e)
 
     def rect_timerEvent(self, final=False):
-        print('timer')
         self.generic_shape_timerEvent(final)
 
     def rect_mouseMoveEvent(self, e):
         self.generic_shape_mouseMoveEvent(e)
 
     def rect_mouseReleaseEvent(self, e):
-        print('release', e.pos())
         self.generic_shape_mouseReleaseEvent(e)
 
     # Polygon events
