@@ -87,12 +87,8 @@ class Canvas(QLabel):
     timer_event = None
 
     current_stamp = None
-    current_stamp_n = -1
 
     def initialize(self):
-        # Setup the stamp state.
-        self.next_stamp()
-
         self.background_color = QColor(self.secondary_color) if self.secondary_color else QColor(Qt.white)
         self.eraser_color = QColor(self.secondary_color) if self.secondary_color else QColor(Qt.white)
         self.eraser_color.setAlpha(100)
@@ -290,16 +286,6 @@ class Canvas(QLabel):
         stamp = self.current_stamp
         p.drawPixmap(e.x() - stamp.width() // 2, e.y() - stamp.height() // 2, stamp)
         self.update()
-
-    def next_stamp(self):
-        self.current_stamp_n += 1
-        if self.current_stamp_n >= len(STAMPS):
-            self.current_stamp_n = 0
-
-        pixmap = QPixmap(STAMPS[self.current_stamp_n])
-
-        self.current_stamp = pixmap
-        return pixmap
 
     # Pen events
 
@@ -710,6 +696,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.primaryButton.pressed.connect(lambda: self.choose_color(self.set_primary_color))
         self.secondaryButton.pressed.connect(lambda: self.choose_color(self.set_secondary_color))
 
+        # Initialize button colours.
         for n, hex in enumerate(COLORS, 1):
             btn = getattr(self, 'colorButton_%d' % n)
             btn.setStyleSheet('QPushButton { background-color: %s; }' % hex)
@@ -742,8 +729,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.canvas.secondary_color_updated.connect(self.set_secondary_color)
 
         # Setup the stamp state.
+        self.current_stamp_n = -1
+        self.next_stamp()
         self.stampnextButton.pressed.connect(self.next_stamp)
-        self.stampnextButton.setIcon(QIcon(self.canvas.current_stamp))
 
         # Menu options
         self.actionNewImage.triggered.connect(self.canvas.initialize)
@@ -804,8 +792,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.secondaryButton.setStyleSheet('QPushButton { background-color: %s; }' % hex)
 
     def next_stamp(self):
-        pixmap = self.canvas.next_stamp()
+        self.current_stamp_n += 1
+        if self.current_stamp_n >= len(STAMPS):
+            self.current_stamp_n = 0
+
+        pixmap = QPixmap(STAMPS[self.current_stamp_n])
         self.stampnextButton.setIcon(QIcon(pixmap))
+
+        self.canvas.current_stamp = pixmap
 
     def copy_to_clipboard(self):
         clipboard = QApplication.clipboard()
