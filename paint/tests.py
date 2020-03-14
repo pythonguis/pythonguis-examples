@@ -40,7 +40,7 @@ def img_not_fill(img):
 	for i in range(0, img.width()):
 		for j in range(0,img.height()):
 			pc = img.pixelColor(i, j)
-			# print(i,j,pc.name())
+			# print(i,'\t',j,'\t',pc.name())
 			if last_color and last_color.name() != pc.name():
 				return True
 			else:
@@ -214,11 +214,19 @@ class TestCanvas(unittest.TestCase):
 				c = self.canvas.pixmap().toImage().pixel(p)
 				self.assertEqual(QColor(c).name(), QColor(Qt.black).name())
 
+
 class TestRectangle(unittest.TestCase):
 
 	def setUp(self):
 		self.canvas = Canvas()
 		self.canvas.initialize()
+		self.canvas.setMouseTracking(True)
+		# Initialize animation timer.
+		# based on the paint.py code, this may be needed?
+		timer = QTimer()
+		timer.timeout.connect(self.canvas.on_timer)
+		timer.setInterval(100)
+		timer.start()
 
 	def test_rectangle_drawing(self):
 		points = [
@@ -226,7 +234,7 @@ class TestRectangle(unittest.TestCase):
 		]
 		for i in points:
 			for j in points:
-				if (True):# i[0] != j[0] or i[1] != j[1]):
+				if (i[0] != j[0] or i[1] != j[1]):
 					p1 = QPoint()
 					p1.setX(i[0])
 					p1.setY(i[1])
@@ -244,24 +252,12 @@ class TestRectangle(unittest.TestCase):
 					self.canvas.set_mode('rect')
 					self.canvas.config['fill'] = False
 					QTest.mousePress(self.canvas, Qt.LeftButton, Qt.NoModifier, p1)
-					QTest.mouseMove(self.canvas, p2, 10)
-					QTest.mouseRelease(self.canvas, Qt.LeftButton, Qt.NoModifier, p2, 10)
-					# print(img_not_fill(self.canvas.pixmap().toImage()))
+					QTest.mouseMove(self.canvas, p2, 100)
+					QTest.mouseRelease(self.canvas, Qt.LeftButton, Qt.NoModifier, p2, 100)
+					print(img_not_fill(self.canvas.pixmap().toImage()))
 					# print(img_not_fill(testCanv.pixmap().toImage()))
 					self.assertEqual(True, img_equals(self.canvas.pixmap().toImage(), testCanv.pixmap().toImage()))
 
-
-# above: tested ~5 / 19 units
-
-# class TestSaveLoad(unittest.TestCase):
-
-# class TestPen(unittest.TestCase):
-
-# class TestBrush(unittest.TestCase):
-
-# class TestLine(unittest.TestCase):
-
-# class TestPolyLine(unittest.TestCase):
 
 if __name__ == '__main__':
 	unittest.main()
