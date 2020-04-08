@@ -2,11 +2,25 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+from PyQt5 import QtGui, QtWidgets, QtCore
+
+from PyQt5.QtGui import QPainter, QBitmap, QPolygon, QPen, QBrush, QColor
+from PyQt5.QtCore import Qt
+
 from MainWindow import Ui_MainWindow
 
 import os
+import sys
 import random
 import types
+
+try:
+    # Include in try/except block if you're also targeting Mac/Linux
+    from PyQt5.QtWinExtras import QtWin
+    myappid = 'com.learnpyqt.minute-apps.paint'
+    QtWin.setCurrentProcessExplicitAppUserModelID(myappid)    
+except ImportError:
+    pass
 
 
 BRUSH_MULT = 3
@@ -36,8 +50,16 @@ MODES = [
 
 CANVAS_DIMENSIONS = 600, 400
 
-STAMP_DIR = './stamps'
-STAMPS = [os.path.join(STAMP_DIR, f) for f in os.listdir(STAMP_DIR)]
+STAMPS = [
+    ':/stamps/pie-apple.png',
+    ':/stamps/pie-cherry.png',
+    ':/stamps/pie-cherry2.png',
+    ':/stamps/pie-lemon.png',
+    ':/stamps/pie-moon.png',
+    ':/stamps/pie-pork.png',
+    ':/stamps/pie-pumpkin.png',
+    ':/stamps/pie-walnut.png',
+]
 
 SELECTION_PEN = QPen(QColor(0xff, 0xff, 0xff), 1, Qt.DashLine)
 PREVIEW_PEN = QPen(QColor(0xff, 0xff, 0xff), 1, Qt.SolidLine)
@@ -222,7 +244,8 @@ class Canvas(QLabel):
         bitmap.clear()  # Starts with random data visible.
 
         p = QPainter(bitmap)
-        # Construct a mask where the user selected area will be kept, the rest removed from the image is transparent.
+        # Construct a mask where the user selected area will be kept, 
+        # the rest removed from the image is transparent.
         userpoly = QPolygon(self.history_pos + [self.current_pos])
         p.setPen(QPen(Qt.color1))
         p.setBrush(QBrush(Qt.color1))  # Solid color, Qt.color1 == bit on.
@@ -764,7 +787,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionUnderline.triggered.connect(lambda s: self.canvas.set_config('underline', s))
 
         sizeicon = QLabel()
-        sizeicon.setPixmap(QPixmap(os.path.join('images', 'border-weight.png')))
+        sizeicon.setPixmap(QPixmap(':/icons/border-weight.png'))
         self.drawingToolbar.addWidget(sizeicon)
         self.sizeselect = QSlider()
         self.sizeselect.setRange(1,20)
@@ -878,6 +901,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
 
-    app = QApplication([])
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon(':/icons/piecasso.ico'))
     window = MainWindow()
     app.exec_()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
-    <height>452</height>
+    <width>706</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,8 +58,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/layer-shape.png</normaloff>images/layer-shape.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/layer-shape.png</normaloff>:/icons/layer-shape.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -84,8 +84,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/layer-shape-polyline.png</normaloff>images/layer-shape-polyline.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/layer-shape-polyline.png</normaloff>:/icons/layer-shape-polyline.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -116,8 +116,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/selection.png</normaloff>images/selection.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/selection.png</normaloff>:/icons/selection.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -148,8 +148,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/eraser.png</normaloff>images/eraser.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/eraser.png</normaloff>:/icons/eraser.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -180,8 +180,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/cake.png</normaloff>images/cake.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/cake.png</normaloff>:/icons/cake.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -212,8 +212,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/pipette.png</normaloff>images/pipette.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/pipette.png</normaloff>:/icons/pipette.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -244,8 +244,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/selection-poly.png</normaloff>images/selection-poly.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/selection-poly.png</normaloff>:/icons/selection-poly.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -276,8 +276,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/paint-brush.png</normaloff>images/paint-brush.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/paint-brush.png</normaloff>:/icons/paint-brush.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -308,8 +308,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/pencil.png</normaloff>images/pencil.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/pencil.png</normaloff>:/icons/pencil.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -340,8 +340,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/paint-can.png</normaloff>images/paint-can.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/paint-can.png</normaloff>:/icons/paint-can.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -372,8 +372,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/edit.png</normaloff>images/edit.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -398,8 +398,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/layer-shape-polygon.png</normaloff>images/layer-shape-polygon.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/layer-shape-polygon.png</normaloff>:/icons/layer-shape-polygon.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -424,8 +424,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/layer-shape-round.png</normaloff>images/layer-shape-round.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/layer-shape-round.png</normaloff>:/icons/layer-shape-round.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -450,8 +450,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/layer-shape-ellipse.png</normaloff>images/layer-shape-ellipse.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/layer-shape-ellipse.png</normaloff>:/icons/layer-shape-ellipse.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -476,8 +476,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/layer-shape-line.png</normaloff>images/layer-shape-line.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/layer-shape-line.png</normaloff>:/icons/layer-shape-line.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -508,8 +508,8 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/spray.png</normaloff>images/spray.png</iconset>
+              <iconset resource="resources.qrc">
+               <normaloff>:/icons/spray.png</normaloff>:/icons/spray.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -1391,8 +1391,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>549</width>
-     <height>22</height>
+     <width>706</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFIle">
@@ -1500,8 +1500,8 @@
   </action>
   <action name="actionOpenImage">
    <property name="icon">
-    <iconset>
-     <normaloff>images/blue-folder-open-image.png</normaloff>images/blue-folder-open-image.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/blue-folder-open-image.png</normaloff>:/icons/blue-folder-open-image.png</iconset>
    </property>
    <property name="text">
     <string>Open Image...</string>
@@ -1509,8 +1509,8 @@
   </action>
   <action name="actionSaveImage">
    <property name="icon">
-    <iconset>
-     <normaloff>images/disk.png</normaloff>images/disk.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/disk.png</normaloff>:/icons/disk.png</iconset>
    </property>
    <property name="text">
     <string>Save Image As...</string>
@@ -1533,8 +1533,8 @@
   </action>
   <action name="actionNewImage">
    <property name="icon">
-    <iconset>
-     <normaloff>images/document-image.png</normaloff>images/document-image.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/document-image.png</normaloff>:/icons/document-image.png</iconset>
    </property>
    <property name="text">
     <string>New Image</string>
@@ -1545,8 +1545,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>images/edit-bold.png</normaloff>images/edit-bold.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/edit-bold.png</normaloff>:/icons/edit-bold.png</iconset>
    </property>
    <property name="text">
     <string>Bold</string>
@@ -1560,8 +1560,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>images/edit-italic.png</normaloff>images/edit-italic.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/edit-italic.png</normaloff>:/icons/edit-italic.png</iconset>
    </property>
    <property name="text">
     <string>Italic</string>
@@ -1575,8 +1575,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>images/edit-underline.png</normaloff>images/edit-underline.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/edit-underline.png</normaloff>:/icons/edit-underline.png</iconset>
    </property>
    <property name="text">
     <string>Underline</string>
@@ -1587,8 +1587,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>images/paint-can-color.png</normaloff>images/paint-can-color.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/paint-can-color.png</normaloff>:/icons/paint-can-color.png</iconset>
    </property>
    <property name="text">
     <string>Fill Shapes?</string>
@@ -1596,6 +1596,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
