@@ -6,14 +6,18 @@ from PyQt5.QtMultimediaWidgets import *
 
 from MainWindow import Ui_MainWindow
 
+
 def hhmmss(ms):
     # s = 1000
     # m = 60000
     # h = 360000
+    print(ms)
     s = round(ms / 1000)
     m, s = divmod(s, 60)
     h, m = divmod(m, 60)
-    return ("%d:%02d:%02d" % (h,m,s)) if h else ("%d:%02d" % (m,s))
+    print(h, m, s)
+    return ("%d:%02d:%02d" % (h, m, s)) if h else ("%d:%02d" % (m, s))
+
 
 class ViewerWindow(QMainWindow):
     state = pyqtSignal(bool)
@@ -54,7 +58,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Add viewer for video playback, separate floating window.
         self.viewer = ViewerWindow(self)
         self.viewer.setWindowFlags(self.viewer.windowFlags() | Qt.WindowStaysOnTopHint)
-        self.viewer.setMinimumSize(QSize(480,360))
+        self.viewer.setMinimumSize(QSize(480, 360))
 
         videoWidget = QVideoWidget()
         self.viewer.setCentralWidget(videoWidget)
@@ -94,9 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def dropEvent(self, e):
         for url in e.mimeData().urls():
-            self.playlist.addMedia(
-                QMediaContent(url)
-            )
+            self.playlist.addMedia(QMediaContent(url))
 
         self.model.layoutChanged.emit()
 
@@ -107,21 +109,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.player.play()
 
     def open_file(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Open file", "", "mp3 Audio (*.mp3);mp4 Video (*.mp4);Movie files (*.mov);All files (*.*)")
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open file",
+            "",
+            "mp3 Audio (*.mp3);mp4 Video (*.mp4);Movie files (*.mov);All files (*.*)",
+        )
 
         if path:
-            self.playlist.addMedia(
-                QMediaContent(
-                    QUrl.fromLocalFile(path)
-                )
-            )
+            self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(path)))
 
         self.model.layoutChanged.emit()
 
     def update_duration(self, duration):
-        print("!", duration)
-        print("?", self.player.duration())
-        
         self.timeSlider.setMaximum(duration)
 
         if duration >= 0:
@@ -156,9 +156,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print(args)
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication([])
     app.setApplicationName("Failamp")
     app.setStyle("Fusion")
@@ -179,7 +177,9 @@ if __name__ == '__main__':
     palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
     palette.setColor(QPalette.HighlightedText, Qt.black)
     app.setPalette(palette)
-    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
+    app.setStyleSheet(
+        "QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }"
+    )
 
     window = MainWindow()
     app.exec_()
