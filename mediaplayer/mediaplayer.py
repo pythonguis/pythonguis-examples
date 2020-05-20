@@ -111,7 +111,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self,
             "Open file",
             "",
-            "mp3 Audio (*.mp3);mp4 Video (*.mp4);Movie files (*.mov);All files (*.*)",
+            "mp3 Audio (*.mp3);;mp4 Video (*.mp4);;Movie files (*.mov);;All files (*.*)",
         )
 
         if path:
