@@ -156,7 +156,10 @@ class MainWindow(QMainWindow):
         # correct tab
         browser.urlChanged.connect(lambda qurl, browser=browser:
                                    self.update_urlbar(qurl, browser))
-
+        browser.titleChanged.connect(lambda _, i=i, browser=browser:
+                                     self.setTabText(i, browser.page().title()))
+        browser.titleChanged.connect(lambda _, i=i, browser=browser:
+                                     self.setTabToolTip(i, browser.page().title()))
         browser.loadFinished.connect(lambda _, i=i, browser=browser:
                                      self.tabs.setTabText(i, browser.page().title()))
 
