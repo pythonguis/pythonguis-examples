@@ -277,7 +277,7 @@ class MainWindow(QMainWindow):
 
     def update_format(self):
         """
-        Update the font format toolbar/actions when a new text selection is made. This is neccessary to keep
+        Update the font format toolbar/actions when a new text selection is made. This is necessary to keep
         toolbars/etc. in sync with the current edit state.
         :return:
         """
