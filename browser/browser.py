@@ -88,6 +88,16 @@ class MainWindow(QMainWindow):
         self.urlbar = QLineEdit()
         self.urlbar.returnPressed.connect(self.navigate_to_url)
         navtb.addWidget(self.urlbar)
+        
+        self.urlbar.setStyleSheet(
+			"QLineEdit"
+				"{"
+					"border-radius: 10px;"
+					"border: 2px solid #b9b9b9;"
+  					"padding: 3px;"
+
+				"}"
+			)
 
         stop_btn = QAction(QIcon(os.path.join('images', 'cross-circle.png')), "Stop", self)
         stop_btn.setStatusTip("Stop loading current page")
