@@ -244,8 +244,9 @@ class Ui_MainWindow(object):
         self.pushButton_eq.setStyleSheet("QPushButton {\n"
 "color: #4CAF50;\n"
 "}")
+
         self.pushButton_eq.setObjectName("pushButton_eq")
-        self.gridLayout.addWidget(self.pushButton_eq, 5, 2, 1, 2)
+        self.gridLayout.addWidget(self.pushButton_eq, 5, 3, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralWidget)
@@ -266,8 +267,23 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionExit)
         self.menuBar.addAction(self.menuFile.menuAction())
 
+        # 在setupUi方法中添加以下代码，创建小数点按钮
+        self.pushButton_dot = QtWidgets.QPushButton(self.centralWidget)
+        self.pushButton_dot.setMinimumSize(QtCore.QSize(0, 50))
+        font = QtGui.QFont()
+        font.setPointSize(27)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton_dot.setFont(font)
+        self.pushButton_dot.setStyleSheet("QPushButton {\n"
+                                          "color: #1976D2;\n"
+                                          "}")
+        self.pushButton_dot.setObjectName("pushButton_dot")
+        self.gridLayout.addWidget(self.pushButton_dot, 5, 2, 1, 1)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -315,4 +331,7 @@ class Ui_MainWindow(object):
         self.actionExit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
         self.actionReset.setText(_translate("MainWindow", "Reset"))
         self.actionReset.setShortcut(_translate("MainWindow", "Ctrl+R"))
+        # 在retranslateUi方法中添加以下代码，为小数点按钮设置文本
+        self.pushButton_dot.setText(_translate("MainWindow", "."))
+        self.pushButton_dot.setShortcut(_translate("MainWindow", "."))
 
