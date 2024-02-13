@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtPrintSupport import *
+from PyQt5.QtWidgets import QShortcut, QLabel, QHBoxLayout
 
 import os
 import sys
@@ -60,6 +61,11 @@ class MainWindow(QMainWindow):
         navtb = QToolBar("Navigation")
         navtb.setIconSize(QSize(16, 16))
         self.addToolBar(navtb)
+        
+        '''Shortcuts'''
+        
+        self.shortcut_open = QShortcut(QKeySequence('F5'), self)
+        self.shortcut_open.triggered.connect(lambda: self.tabs.currentWidget().reload())
 
         back_btn = QAction(QIcon(os.path.join('images', 'arrow-180.png')), "Back", self)
         back_btn.setStatusTip("Back to previous page")
