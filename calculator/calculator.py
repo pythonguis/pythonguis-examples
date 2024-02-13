@@ -18,9 +18,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Setup numbers.
         for n in range(0, 10):
-            getattr(self, 'pushButton_n%s' % n).pressed.connect(lambda v=n: self.input_number(v))
+            getattr(self, 'pushButton_n%s' % n).pressed.connect(lambda value=n: self.input_number(value))
+
 
         # Setup operations.
+        self.pushButton_dot.pressed.connect(lambda: self.input_dot())
         self.pushButton_add.pressed.connect(lambda: self.operation(operator.add))
         self.pushButton_sub.pressed.connect(lambda: self.operation(operator.sub))
         self.pushButton_mul.pressed.connect(lambda: self.operation(operator.mul))
@@ -66,7 +68,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.state = INPUT
             self.stack[-1] = v
         else:
-            self.stack[-1] = self.stack[-1] * 10 + v
+            current_input = str(self.stack[-1])
+            # 检查当前输入是否已经包含小数点
+            if '.' in current_input:
+                # 如果包含小数点，将新输入的数字添加到小数点后面
+                integer_part, decimal_part = current_input.split('.')
+                self.stack[-1] = float(f"{integer_part}.{decimal_part}{v}")
+            else:
+                # 如果没有小数点，将新输入的数字追加到当前输入
+                self.stack[-1] = self.stack[-1] * 10 + v
 
         self.display()
 
@@ -102,6 +112,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.current_op = None
                 self.state = READY
                 self.display()
+
+    def input_dot(self):
+        if self.state == READY:
+            self.state = INPUT
+            self.stack[-1] = 0
+
+        # 检查当前输入是否已经包含小数点
+        if '.' not in str(self.stack[-1]):
+            # 如果没有小数点，添加小数点到当前输入
+            self.stack[-1] = str(self.stack[-1]) + '.'
+            self.display()
 
 
 if __name__ == '__main__':
