@@ -157,15 +157,19 @@ class MainWindow(QMainWindow):
             self.browser.setHtml(html)
             self.urlbar.setText(filename)
 
+    def save_html(self, html):
+        with open(self.save_file, 'w') as f:
+            f.write(html)
+
     def save_file(self):
         filename, _ = QFileDialog.getSaveFileName(self, "Save Page As", "",
                                                   "Hypertext Markup Language (*.htm *html);;"
                                                   "All files (*.*)")
 
         if filename:
-            html = self.browser.page().toHtml()
-            with open(filename, 'w') as f:
-                f.write(html)
+            self.save_file = filename
+            self.browser.page().toHtml(self.save_html)
+
 
     def print_page(self):
         dlg = QPrintPreviewDialog()
