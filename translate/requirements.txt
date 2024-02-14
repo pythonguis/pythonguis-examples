@@ -1,3 +1,4 @@
 PyQt5>=5.6
 sip
 requests>=2.0.0
+googletrans>=2.2.0
