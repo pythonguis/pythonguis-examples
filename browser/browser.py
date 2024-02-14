@@ -51,6 +51,7 @@ class MainWindow(QMainWindow):
 
         self.browser.urlChanged.connect(self.update_urlbar)
         self.browser.loadFinished.connect(self.update_title)
+        self.browser.createWindow = self.new_window
         self.setCentralWidget(self.browser)
 
         self.status = QStatusBar()
@@ -199,6 +200,15 @@ class MainWindow(QMainWindow):
         self.urlbar.setText(q.toString())
         self.urlbar.setCursorPosition(0)
 
+    def new_window(self, page_type):
+
+        profile = self.browser.page().profile()
+        new_page = QWebEnginePage(profile)
+        new_window = MainWindow()
+        new_window.browser.setPage(new_page)
+        new_window.show()
+
+        return new_window.browser
 
 app = QApplication(sys.argv)
 app.setApplicationName("MooseAche")
