@@ -71,3 +71,4 @@ dist
 
 # Misc
 *.autosave
+.vscode
