@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication, QDoubleSpinBox, QMainWindow, QSpinBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QSpinBox
 
 
 class MainWindow(QMainWindow):
