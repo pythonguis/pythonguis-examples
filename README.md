@@ -4,12 +4,23 @@
 be _freely_ re-used, re-mixed and tweaked to build your own Python GUI applications.
 
 Examples are available for
-[PyQt6](https://github.com/pythonguis/15-minute-apps/tree/master/pyqt6),
-[PySide6](https://github.com/pythonguis/15-minute-apps/tree/master/pyside6),
-[PySide2](https://github.com/pythonguis/15-minute-apps/tree/master/pyside2)
-and [PyQt5](https://github.com/pythonguis/15-minute-apps/tree/master/pyqt5)
+[PyQt6](https://github.com/pythonguis/pythonguis-examples/tree/main/pyqt6) and
+[PySide6](https://github.com/pythonguis/pythonguis-examples/tree/main/pyside6),
+(many examples) along with
+[DearPyGui](https://github.com/pythonguis/pythonguis-examples/tree/main/dearpygui),
+[Flet](https://github.com/pythonguis/pythonguis-examples/tree/main/flet),
+[Kivy](https://github.com/pythonguis/pythonguis-examples/tree/main/kivy),
+[NiceGUI](https://github.com/pythonguis/pythonguis-examples/tree/main/nicegui),
+[PyQt5](https://github.com/pythonguis/pythonguis-examples/tree/main/pyqt5)
+[PySide2](https://github.com/pythonguis/pythonguis-examples/tree/main/pyside2)
+[Streamlit](https://github.com/pythonguis/pythonguis-examples/tree/main/streamlit) and
+[Tkinter](https://github.com/pythonguis/pythonguis-examples/tree/main/tkinter)
 
-> Many of these examples have more detailed write-ups on the [Python GUIs website](https://www.pythonguis.com/). If you're new to creating GUI apps check out the introductory [PyQt6 tutorial](https://www.pythonguis.com/pyqt6-tutorial/) or [PySide6 tutorial](https://www.pythonguis.com/pyside6-tutorial/).
+_Not sure which library to use?_ See our [Which Python GUI?](https://www.pythonguis.com/faq/which-python-gui-library/) guide.
+
+> Many of these examples have more detailed write-ups on the [Python GUIs website](https://www.pythonguis.com/). See the source code for example to get links to the specific tutorials.
+
+If you're new to creating GUI apps check out the introductory [PyQt6 tutorial](https://www.pythonguis.com/pyqt6-tutorial/) or [PySide6 tutorial](https://www.pythonguis.com/pyside6-tutorial/).
 
 ## The demo apps
 
@@ -33,30 +44,6 @@ and Paint.
 1. Weather - "Raindar" (QtDesigner)
 1. Currency converter - "Doughnut" (PyQtGraph)
 1. Solitaire - "Ronery" (QGraphicsScene)
-
-## The widgets
-
-
-![Graphical Equalizer](https://i.imgur.com/0F2ZgqE.gif)
-**Graphical Equalizer** Visualize audio frequency changes with configurable styles and decay.
-
-![Power Meter](https://i.imgur.com/0dpZIMV.gif)
-**Power Bar** Rotary control with amplitude display.
-
-![Palette](https://cdn.learnpyqt.com/media/images/Screenshot_2019-06-15_at_15.18.14.max-500x500.png)
-**Palette** Select colors from a configurable linear or grid palette.
-
-![Gradient Editor](https://cdn.learnpyqt.com/media/images/Screenshot_2019-06-15_at_18.32.52.max-500x500.png)
-**Linear Gradient Editor** Design custom linear gradients with multiple stops and colors.
-
-**Color Button** Simple button that displays and selects colors.
-
-**Paint** Draw pictures with a custom bitmap canvas, with color and pen control.
-
-**Password Edit** A password line editor with toggleable visibility action.
-
-![Toggle Widget](https://i.imgur.com/rHrkkG3.gif)
-Replace checkboxes with this handy toggle widget, with custom colors and optional animations.
 
 ## The tutorials
 
