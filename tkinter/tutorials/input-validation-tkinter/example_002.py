@@ -1,3 +1,6 @@
+# Input Validation in Tkinter GUI Apps
+# https://www.pythonguis.com/tutorials/input-validation-tkinter/
+
 from tkinter import Tk, ttk
 
 # Create the app's main window

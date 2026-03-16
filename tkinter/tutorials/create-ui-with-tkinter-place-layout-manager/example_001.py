@@ -1,12 +1,17 @@
+# Using the Place Geometry Manager in Tkinter
+# https://www.pythonguis.com/tutorials/create-ui-with-tkinter-place-layout-manager/
+
 import tkinter as tk
 
 root = tk.Tk()
 root.title("Place layout Example")
 root.geometry("300x300+50+100")
 
+
 def display_selection(event):
     selection = cities_listbox.curselection()
     print(cities_listbox.get(selection))
+
 
 # Label to display the question
 tk.Label(

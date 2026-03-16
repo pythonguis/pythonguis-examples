@@ -1,3 +1,6 @@
+# Customizing Your Tkinter App's Windows
+# https://www.pythonguis.com/tutorials/customized-windows-tkinter/
+
 from tkinter import Tk
 
 # Create the app's main window
